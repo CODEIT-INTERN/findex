@@ -1,5 +1,5 @@
 ---
-name: "✨ Refactor"
+name: "🔨 Refactor"
 about: 새로운 기능 구현
 title: "[REFACTOR]"
 labels: refactor
