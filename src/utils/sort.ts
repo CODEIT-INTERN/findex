@@ -6,7 +6,10 @@ import type { SortDescriptor } from "react-aria-components";
  * - number면 숫자 비교
  * - 그 외는 문자열로 비교
  */
-export function sortByDescriptor<T extends object>(items: T[], sortDescriptor: SortDescriptor): T[] {
+export function sortByDescriptor<T extends object>(
+  items: T[],
+  sortDescriptor: SortDescriptor,
+): T[] {
   const { column, direction } = sortDescriptor;
 
   if (!column) return items;
@@ -39,3 +42,8 @@ export function sortByDescriptor<T extends object>(items: T[], sortDescriptor: S
 
   return copied;
 }
+
+export const isActiveSortColumn = (
+  columnName: string,
+  sortDescriptor: SortDescriptor,
+) => sortDescriptor.column === columnName;
