@@ -1,6 +1,7 @@
-import { ChevronDown, Check } from "@untitledui/icons";
-import { Dropdown } from "./dropdown";
+import { useState } from "react";
+import { Check, ChevronDown } from "@untitledui/icons";
 import { Button } from "../buttons/Button";
+import { Dropdown } from "./Dropdown";
 
 interface DropdownButtonProps {
   placeholder?: string;
@@ -17,18 +18,19 @@ export const DropdownButton = ({
   onChange,
   className,
 }: DropdownButtonProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const selectedLabel = (value && label[value]) || placeholder;
 
   return (
-    <Dropdown>
+    <Dropdown onOpenChange={setIsOpen}>
       <Button
-        className={`group py-2 px-3 rounded-lg flex justify-between ${className}`}
+        className={`group text-md flex justify-between rounded-lg px-3 py-2 text-left font-medium ${className} ${isOpen ? "ring-brand ring-2" : ""}`}
         color="secondary"
         iconTrailing={<ChevronDown size={16} />}
       >
-        {selectedLabel}
+        {selectedLabel}{" "}
       </Button>
-      <Dropdown.Popover>
+      <Dropdown.Popover className="popoverRedered">
         <Dropdown.Menu>
           <Dropdown.Section>
             {Object.entries(label).map(([key, itemLabel]) => (
@@ -39,6 +41,7 @@ export const DropdownButton = ({
                   onChange?.(key);
                 }}
                 icon={value === key ? Check : undefined}
+                className="text-md font-medium"
               >
                 {itemLabel}
               </Dropdown.Item>
