@@ -25,7 +25,7 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "IndexManagement",
+        path: "index-management",
         element: <IndexManagement />,
       },
       {

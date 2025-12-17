@@ -4,7 +4,6 @@ import IndexTable from "@/components/pages/indexManagement/IndexTable";
 const IndexManagement = () => {
   return (
     <div>
-      지수관리
       <IndexFilterSection />
       <IndexTable />
     </div>
