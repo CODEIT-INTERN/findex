@@ -1,3 +1,5 @@
+import { Button } from "@/components/common/buttons/Button";
+import { Empty } from "@/components/common/Empty";
 import { useToastStore } from "@/store/toastStore";
 
 export default function DataManagement() {
@@ -12,6 +14,10 @@ export default function DataManagement() {
           실패
         </button>
       </div>
+      <Empty
+        message="등록된 데이터가 없습니다."
+        button={<Button>Open API 연동</Button>}
+      />
     </div>
   );
 }
