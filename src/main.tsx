@@ -11,7 +11,7 @@ import Layout from "@/components/layout/Layout";
 import { ToastContainer } from "./components/common/toast/ToastContainer";
 import Dashboard from "./pages/Dashboard";
 import DataManagement from "./pages/DataManagement";
-import Indices from "./pages/Indices";
+import IndexManagement from "./pages/IndexManagement";
 import Integrations from "./pages/Integrations";
 
 const router = createBrowserRouter([
@@ -25,8 +25,8 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "indices",
-        element: <Indices />,
+        path: "IndexManagement",
+        element: <IndexManagement />,
       },
       {
         path: "data-management",
