@@ -8,7 +8,7 @@ export const NAV_ITEMS = [
   },
   {
     label: "지수 관리",
-    path: "/indices",
+    path: "/index-management",
     icon: BarChart02,
   },
   {
