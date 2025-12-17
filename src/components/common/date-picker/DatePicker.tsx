@@ -1,6 +1,3 @@
-import { getLocalTimeZone, today } from "@internationalized/date";
-import { useControlledState } from "@react-stately/utils";
-import { Calendar as CalendarIcon } from "@untitledui/icons";
 import { useDateFormatter } from "react-aria";
 import type {
   DatePickerProps as AriaDatePickerProps,
@@ -12,8 +9,12 @@ import {
   Group as AriaGroup,
   Popover as AriaPopover,
 } from "react-aria-components";
+import { getLocalTimeZone, today } from "@internationalized/date";
+import { useControlledState } from "@react-stately/utils";
+import { Calendar as CalendarIcon, ChevronDown } from "@untitledui/icons";
 import { Button } from "@/components/common/buttons/Button";
 import { cx } from "@/utils/cx";
+import { formatToKNDate } from "@/utils/date";
 import { Calendar } from "./Calendar";
 
 const highlightedDates = [today(getLocalTimeZone())];
@@ -35,20 +36,13 @@ export const DatePicker = ({
   placeholder,
   ...props
 }: DatePickerProps) => {
-  const formatter = useDateFormatter({
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
   const [value, setValue] = useControlledState(
     valueProp,
     defaultValue || null,
-    onChange
+    onChange,
   );
 
-  const formattedDate = value
-    ? formatter.format(value.toDate(getLocalTimeZone()))
-    : placeholder;
+  const formattedDate = formatToKNDate(value) || placeholder;
 
   return (
     <AriaDatePicker
@@ -61,8 +55,9 @@ export const DatePicker = ({
         <Button
           size="md"
           color="secondary"
-          iconLeading={CalendarIcon}
-          className="w-full"
+          iconLeading={<CalendarIcon size={20} stroke="#535862" />}
+          iconTrailing={<ChevronDown />}
+          className={`${!value ? "text-text-placeholder" : ""} text-md flex w-full justify-between font-normal`}
         >
           {formattedDate}
         </Button>
@@ -74,19 +69,19 @@ export const DatePicker = ({
           cx(
             "origin-(--trigger-anchor-point) will-change-transform",
             isEntering &&
-              "duration-150 ease-out animate-in fade-in placement-right:slide-in-from-left-0.5 placement-top:slide-in-from-bottom-0.5 placement-bottom:slide-in-from-top-0.5",
+              "animate-in fade-in placement-right:slide-in-from-left-0.5 placement-top:slide-in-from-bottom-0.5 placement-bottom:slide-in-from-top-0.5 duration-150 ease-out",
             isExiting &&
-              "duration-100 ease-in animate-out fade-out placement-right:slide-out-to-left-0.5 placement-top:slide-out-to-bottom-0.5 placement-bottom:slide-out-to-top-0.5"
+              "animate-out fade-out placement-right:slide-out-to-left-0.5 placement-top:slide-out-to-bottom-0.5 placement-bottom:slide-out-to-top-0.5 duration-100 ease-in",
           )
         }
       >
-        <AriaDialog className="rounded-2xl bg-primary shadow-xl ring ring-secondary_alt">
+        <AriaDialog className="bg-primary ring-secondary_alt rounded-2xl shadow-xl ring">
           {({ close }) => (
             <>
               <div className="flex px-6 py-5">
                 <Calendar highlightedDates={highlightedDates} />
               </div>
-              <div className="grid grid-cols-2 gap-3 border-t border-secondary p-4">
+              <div className="border-secondary grid grid-cols-2 gap-3 border-t p-4">
                 <Button
                   size="md"
                   color="secondary"
@@ -105,7 +100,7 @@ export const DatePicker = ({
                     close();
                   }}
                 >
-                  적용하기
+                  확인
                 </Button>
               </div>
             </>
