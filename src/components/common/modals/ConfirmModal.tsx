@@ -1,5 +1,5 @@
 import React from "react";
-import { AlertCircle, RefreshCcw05, Trash01 } from "@untitledui/icons";
+import { RefreshCcw05, Trash01 } from "@untitledui/icons";
 import { Button } from "../buttons/Button";
 import { BaseModal } from "./BaseModal";
 
