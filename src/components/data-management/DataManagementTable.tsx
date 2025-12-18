@@ -1,24 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
-import { Edit01, Trash01 } from "@untitledui/icons";
+import { Edit01, RefreshCcw05, Trash01 } from "@untitledui/icons";
+import { deleteIndexData } from "@/api/indexDataApi";
 import { Button } from "@/components/common/buttons/Button";
 import { Table } from "@/components/common/table/Table";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { IndexDataDto } from "@/model/indexData";
 import { useIndexDataListStore } from "@/store/indexDataListStore";
+import { useModalStore } from "@/store/modalStore";
+import { useToastStore } from "@/store/toastStore";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
+import { Empty } from "../common/Empty";
 
-interface DataManagementTableProps {
-  onEdit: (item: IndexDataDto) => void;
-  onDelete: (item: IndexDataDto) => void;
-}
-
-export default function DataManagementTable({
-  onEdit,
-  onDelete,
-}: DataManagementTableProps) {
+export default function DataManagementTable() {
   const { items, isLoading, error, hasNext, filters, fetch, fetchNext } =
     useIndexDataListStore();
+  const { successToast, errorToast } = useToastStore();
+  const { openConfirm, close } = useModalStore();
 
   // 테이블 정렬
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -39,6 +37,31 @@ export default function DataManagementTable({
     return sortByDescriptor<IndexDataDto>(items, sortDescriptor);
   }, [items, sortDescriptor]);
 
+  // 지수 데이터 삭제
+  const handleDeleteIndexData = async (id: number) => {
+    if (!id) return;
+    try {
+      await deleteIndexData(id);
+      successToast("성공적으로 삭제되었습니다.");
+      await fetch();
+    } catch (error) {
+      console.log(error);
+      errorToast("삭제에 실패하였습니다.");
+    } finally {
+      close();
+    }
+  };
+
+  const handleDeleteClick = (id: number) => {
+    openConfirm({
+      title: "지수 데이터 삭제",
+      description: "정말로 이 지수 데이터를 삭제하겠습니다까?",
+      onConfirm: () => {
+        handleDeleteIndexData(id);
+      },
+    });
+  };
+
   useEffect(() => {
     fetch();
   }, [fetch, filters]);
@@ -46,7 +69,7 @@ export default function DataManagementTable({
   const hasNoData = !isLoading && !error && sortedItems.length === 0;
 
   return (
-    <div className="scrollbar-thin flex-1 overflow-auto">
+    <div className="scrollbar-thin flex flex-1 flex-col overflow-auto">
       <Table
         aria-label="데이터 목록"
         sortDescriptor={sortDescriptor}
@@ -131,13 +154,13 @@ export default function DataManagementTable({
                     color="tertiary"
                     iconLeading={Trash01}
                     className="size-7 text-gray-400"
-                    onClick={() => onDelete(item)}
+                    onClick={() => handleDeleteClick(item.id)}
                   />
                   <Button
                     color="tertiary"
                     iconLeading={Edit01}
                     className="size-7 text-gray-400"
-                    onClick={() => onEdit(item)}
+                    onClick={() => {}}
                   />
                 </div>
               </Table.Cell>
@@ -154,8 +177,15 @@ export default function DataManagementTable({
       </div>
 
       {hasNoData && (
-        <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
-          <span className="text-disabled">현재 표시할 부서가 없습니다</span>
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <Empty
+            message="등록된 데이터가 없습니다"
+            button={
+              <Button iconLeading={<RefreshCcw05 size={20} />}>
+                Open API 연동
+              </Button>
+            }
+          />
         </div>
       )}
     </div>

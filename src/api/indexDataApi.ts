@@ -85,3 +85,10 @@ export const getFavoriteIndexPerformance = (
 export const downloadIndexDataCSV = (params?: IndexDataExportParams) => {
   return apiClient.get<Blob>("/index-data/export/csv", params);
 };
+
+/**
+ * 지수 데이터 연동
+ */
+export const syncIndexData = (body) => {
+  return apiClient.post("/sync-jobs/index-data", body);
+};

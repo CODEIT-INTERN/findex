@@ -1,10 +1,22 @@
-import { useEffect } from "react";
 import { Plus, RefreshCcw05, Share01 } from "@untitledui/icons";
 import { Button } from "@/components/common/buttons/Button";
+import type { IndexDataDto } from "@/model/indexData";
 import { useIndexDataListStore } from "@/store/indexDataListStore";
+import { useToastStore } from "@/store/toastStore";
 
 export default function DataManagementHeader() {
-  const { totalElements } = useIndexDataListStore();
+  const { totalElements, isLoadingExport, exportData } =
+    useIndexDataListStore();
+  const { successToast, errorToast } = useToastStore();
+
+  const handleExportClick = async () => {
+    try {
+      await exportData();
+      successToast("성공적으로 다운로드되었습니다.");
+    } catch (error) {
+      errorToast("다운로드에 실패하였습니다.");
+    }
+  };
 
   return (
     <div className="border-secondary flex items-center justify-between border-b px-6 py-5">
@@ -15,7 +27,12 @@ export default function DataManagementHeader() {
         </span>
       </div>
       <div className="flex items-center gap-3 max-sm:flex-col max-sm:items-end">
-        <Button color="tertiary" iconLeading={<Share01 size={20} />}>
+        <Button
+          color="tertiary"
+          iconLeading={<Share01 size={20} />}
+          onClick={handleExportClick}
+          disabled={isLoadingExport}
+        >
           Export
         </Button>
         <Button color="secondary" iconLeading={<Plus size={20} />}>

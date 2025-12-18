@@ -1,38 +1,13 @@
-import { useState } from "react";
 import DataManagementFilter from "@/components/data-management/DataManagementFilter";
 import DataManagementHeader from "@/components/data-management/DataManagementHeader";
 import DataManagementTable from "@/components/data-management/DataManagementTable";
-import type { IndexDataDto } from "@/model/indexData";
 
 export default function DataManagement() {
-  const [selected, setSelected] = useState<IndexDataDto | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<IndexDataDto | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-
-  // 데이터 관리 추가 모달 열기
-  const onAddClick = () => {
-    setSelected(null);
-    setIsModalOpen(true);
-  };
-
-  // 데이터 관리수정 모달 열기
-  const onEditClick = (item: IndexDataDto) => {
-    setSelected(item);
-    setIsModalOpen(true);
-  };
-
-  // 데이터 관리 삭제 확인 모달 열기
-  const onDeleteClick = (item: IndexDataDto) => {
-    setDeleteTarget(item);
-    setIsConfirmOpen(true);
-  };
-
   return (
-    <div className="border-secondary flex min-h-0 flex-col rounded-xl border bg-white">
+    <div className="border-secondary flex min-h-0 flex-1 flex-col rounded-xl border bg-white">
       <DataManagementHeader />
       <DataManagementFilter />
-      <DataManagementTable onDelete={onDeleteClick} onEdit={onEditClick} />
+      <DataManagementTable />
     </div>
   );
 }

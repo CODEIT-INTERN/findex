@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navigation from "@/components/layout/Navigation";
 import Header from "../common/Header";
+import { ModalHost } from "../ModalHost";
 
 export default function Layout() {
   return (
@@ -17,6 +18,9 @@ export default function Layout() {
           </div>
         </main>
       </div>
+
+      {/* 전역 모달 */}
+      <ModalHost />
     </div>
   );
 }
