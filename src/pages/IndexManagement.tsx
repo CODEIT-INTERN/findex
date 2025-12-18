@@ -1,6 +1,6 @@
-import IndexFilterSection from "@/components/pages/indexManagement/IndexManagementFilter";
-import IndexHeader from "@/components/pages/indexManagement/IndexManagementHeader";
-import IndexTable from "@/components/pages/indexManagement/IndexManagementTable";
+import IndexFilterSection from "@/components/pages/index-management/IndexManagementFilter";
+import IndexHeader from "@/components/pages/index-management/IndexManagementHeader";
+import IndexTable from "@/components/pages/index-management/IndexManagementTable";
 
 const IndexManagement = () => {
   return (
