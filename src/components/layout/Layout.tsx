@@ -4,15 +4,15 @@ import Header from "../common/Header";
 
 export default function Layout() {
   return (
-    <div className="text-primary min-h-screen bg-slate-50">
-      <div className="mx-auto flex min-h-screen max-w-350 flex-col">
+    <div className="text-primary h-screen bg-slate-50">
+      <div className="mx-auto flex h-full min-h-0 max-w-350 flex-col">
         {/* 헤더바 */}
         <Navigation />
 
         {/* 메인 컨텐츠 영역 */}
-        <main className="flex-1">
+        <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
           <Header />
-          <div className="mx-auto w-full px-4 py-6">
+          <div className="mx-auto flex min-h-0 w-full flex-1 flex-col px-4 py-6">
             <Outlet />
           </div>
         </main>
