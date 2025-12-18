@@ -140,3 +140,17 @@ export const hoursAgoFromNow = (
   const diffMs = now.getTime() - ts;
   return Math.floor(diffMs / 3_600_000);
 };
+
+// 2025. 01. 10 형식의 문자열로 변환
+export const formatToKNDate = (
+  dateValue: DateValue | null | undefined,
+): string | null => {
+  if (!dateValue) return null;
+
+  const date = dateValue.toDate(getLocalTimeZone());
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}. ${month}. ${day}`;
+};

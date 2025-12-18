@@ -1,7 +1,21 @@
-import { type ComponentType, type HTMLAttributes, type ReactNode, type Ref, createContext, useContext } from "react";
+import {
+  createContext,
+  useContext,
+  type ComponentType,
+  type HTMLAttributes,
+  type ReactNode,
+  type Ref,
+} from "react";
+import type {
+  InputProps as AriaInputProps,
+  TextFieldProps as AriaTextFieldProps,
+} from "react-aria-components";
+import {
+  Group as AriaGroup,
+  Input as AriaInput,
+  TextField as AriaTextField,
+} from "react-aria-components";
 import { InfoCircle } from "@untitledui/icons";
-import type { InputProps as AriaInputProps, TextFieldProps as AriaTextFieldProps } from "react-aria-components";
-import { Group as AriaGroup, Input as AriaInput, TextField as AriaTextField } from "react-aria-components";
 import { HintText } from "@/components/common/input/HintText";
 import { Label } from "@/components/common/input/Label";
 import { cx, sortCx } from "@/utils/cx";
@@ -73,24 +87,24 @@ export const InputBase = ({
       ref={groupRef}
       className={({ isFocusWithin, isDisabled, isInvalid }) =>
         cx(
-          "relative flex w-full flex-row place-content-center place-items-center rounded-lg bg-primary shadow-xs ring-1 ring-primary transition-shadow duration-100 ease-linear ring-inset",
+          "bg-primary ring-primary relative flex w-full flex-row place-content-center place-items-center rounded-lg shadow-xs ring-1 transition-shadow duration-100 ease-linear ring-inset",
 
-          isFocusWithin && !isDisabled && "ring-2 ring-brand",
+          isFocusWithin && !isDisabled && "ring-brand ring-2",
 
           // Disabled state styles
-          isDisabled && "cursor-not-allowed bg-disabled_subtle ring-disabled",
-          "group-disabled:cursor-not-allowed group-disabled:bg-disabled_subtle group-disabled:ring-disabled",
+          isDisabled && "bg-disabled_subtle ring-disabled cursor-not-allowed",
+          "group-disabled:bg-disabled_subtle group-disabled:ring-disabled group-disabled:cursor-not-allowed",
 
           // Invalid state styles
           isInvalid && "ring-error_subtle",
           "group-invalid:ring-error_subtle",
 
           // Invalid state with focus-within styles
-          isInvalid && isFocusWithin && "ring-2 ring-error",
-          isFocusWithin && "group-invalid:ring-2 group-invalid:ring-error",
+          isInvalid && isFocusWithin && "ring-error ring-2",
+          isFocusWithin && "group-invalid:ring-error group-invalid:ring-2",
 
           context?.wrapperClassName,
-          wrapperClassName
+          wrapperClassName,
         )
       }
     >
@@ -98,11 +112,11 @@ export const InputBase = ({
       {Icon && (
         <Icon
           className={cx(
-            "pointer-events-none absolute size-5 text-fg-quaternary",
+            "pointer-events-none absolute size-5 text-black",
             isDisabled && "text-fg-disabled",
             sizes[inputSize].iconLeading,
             context?.iconClassName,
-            iconClassName
+            iconClassName,
           )}
         />
       )}
@@ -113,18 +127,21 @@ export const InputBase = ({
         ref={ref}
         placeholder={placeholder}
         className={cx(
-          "m-0 w-full bg-transparent text-md text-primary ring-0 outline-hidden placeholder:text-placeholder placeholder:font-normal autofill:rounded-lg autofill:text-primary",
-          isDisabled && "cursor-not-allowed text-disabled",
+          "text-md text-primary placeholder:text-placeholder autofill:text-primary m-0 w-full bg-transparent ring-0 outline-hidden placeholder:font-normal autofill:rounded-lg",
+          isDisabled && "text-disabled cursor-not-allowed",
           sizes[inputSize].root,
           context?.inputClassName,
-          inputClassName
+          inputClassName,
         )}
       />
 
       {/* Invalid icon */}
       {isInvalid && (
         <InfoCircle
-          className={cx("pointer-events-none absolute size-4 text-fg-error-secondary", sizes[inputSize].iconTrailing)}
+          className={cx(
+            "text-fg-error-secondary pointer-events-none absolute size-4",
+            sizes[inputSize].iconTrailing,
+          )}
         />
       )}
 
@@ -132,14 +149,14 @@ export const InputBase = ({
       {shortcut && (
         <div
           className={cx(
-            "pointer-events-none absolute inset-y-0.5 right-0.5 z-10 flex items-center rounded-r-[inherit] bg-linear-to-r from-transparent to-bg-primary to-40% pl-8",
-            sizes[inputSize].shortcut
+            "to-bg-primary pointer-events-none absolute inset-y-0.5 right-0.5 z-10 flex items-center rounded-r-[inherit] bg-linear-to-r from-transparent to-40% pl-8",
+            sizes[inputSize].shortcut,
           )}
         >
           <span
             className={cx(
-              "pointer-events-none rounded px-1 py-px text-xs font-medium text-quaternary ring-1 ring-secondary select-none ring-inset",
-              isDisabled && "bg-transparent text-disabled"
+              "text-quaternary ring-secondary pointer-events-none rounded px-1 py-px text-xs font-medium ring-1 select-none ring-inset",
+              isDisabled && "text-disabled bg-transparent",
             )}
             aria-hidden="true"
           >
@@ -161,9 +178,13 @@ interface BaseProps {
 }
 
 interface TextFieldProps
-  extends BaseProps,
+  extends
+    BaseProps,
     AriaTextFieldProps,
-    Pick<InputBaseProps, "size" | "wrapperClassName" | "inputClassName" | "iconClassName"> {
+    Pick<
+      InputBaseProps,
+      "size" | "wrapperClassName" | "inputClassName" | "iconClassName"
+    > {
   ref?: Ref<HTMLDivElement>;
 }
 
@@ -178,7 +199,7 @@ export const TextField = ({ className, ...props }: TextFieldProps) => {
         className={(state) =>
           cx(
             "group flex h-max w-full flex-col items-start justify-start gap-1.5",
-            typeof className === "function" ? className(state) : className
+            typeof className === "function" ? className(state) : className,
           )
         }
       />
@@ -210,10 +231,22 @@ export const Input = ({
   ...props
 }: InputProps) => {
   return (
-    <TextField aria-label={!label ? placeholder : undefined} {...props} className={className}>
+    <TextField
+      aria-label={!label ? placeholder : undefined}
+      {...props}
+      className={className}
+    >
       {({ isRequired, isInvalid }) => (
         <>
-          {label && <Label isRequired={hideRequiredIndicator ? !hideRequiredIndicator : isRequired}>{label}</Label>}
+          {label && (
+            <Label
+              isRequired={
+                hideRequiredIndicator ? !hideRequiredIndicator : isRequired
+              }
+            >
+              {label}
+            </Label>
+          )}
 
           <InputBase
             {...{

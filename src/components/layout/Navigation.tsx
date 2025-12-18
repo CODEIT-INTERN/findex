@@ -14,6 +14,7 @@ export default function Navigation() {
       <div className="flex items-center gap-5">
         {NAV_ITEMS.map((item) => (
           <NavLink
+            key={item.id}
             to={item.path}
             className={({ isActive }) =>
               cx(

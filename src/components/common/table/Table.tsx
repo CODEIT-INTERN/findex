@@ -112,7 +112,7 @@ const TableHead = ({
           <div className="flex items-center gap-1">
             {label && (
               <span
-                className={`${isActive ? "text-secondary" : "text-quaternary"} text-xs font-semibold whitespace-nowrap`}
+                className={`${isActive ? "text-brand-tertiary" : "text-quaternary"} text-xs font-semibold whitespace-nowrap`}
               >
                 {label}
               </span>
@@ -124,7 +124,7 @@ const TableHead = ({
             (state.sortDirection ? (
               <ArrowDown
                 className={cx(
-                  "text-secondary size-3 stroke-[3px]",
+                  "text-text-brand-tertiary size-3 stroke-[3px]",
                   state.sortDirection === "ascending" && "rotate-180",
                 )}
               />
