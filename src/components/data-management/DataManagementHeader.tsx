@@ -8,13 +8,13 @@ export default function DataManagementHeader() {
 
   return (
     <div className="border-secondary flex items-center justify-between border-b px-6 py-5">
-      <div className="flex shrink-0 flex-col justify-center">
+      <div className="flex h-full shrink-0 flex-col justify-center max-sm:justify-start">
         <h2 className="text-lg leading-7 font-semibold">데이터 목록</h2>
         <span className="text-tertiary text-sm font-normal">
           총 {totalElements.toLocaleString("kr")}개
         </span>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 max-sm:flex-col max-sm:items-end">
         <Button color="tertiary" iconLeading={<Share01 size={20} />}>
           Export
         </Button>

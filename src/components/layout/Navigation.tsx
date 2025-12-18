@@ -7,7 +7,7 @@ export default function Navigation() {
   return (
     <nav className="flex justify-between py-6">
       {/* 브랜드 영역 */}
-      <Link to={"/"}>
+      <Link to={"/"} className="shrink-0">
         <img src={Logo} alt="logo" />
       </Link>
       {/* 네비게이션 섹션들 */}
@@ -18,7 +18,7 @@ export default function Navigation() {
             to={item.path}
             className={({ isActive }) =>
               cx(
-                "text-tertiary rounded-full px-6 py-2 text-lg font-semibold",
+                "text-tertiary shrink-0 rounded-full px-6 py-2 text-lg font-semibold",
                 isActive ? "bg-primary-solid text-white" : "hover:bg-gray-200",
               )
             }

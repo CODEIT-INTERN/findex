@@ -30,18 +30,6 @@ export default function DataManagement() {
 
   return (
     <div className="border-secondary flex min-h-0 flex-col rounded-xl border bg-white">
-      {/* <div className="flex flex-col">
-        <button onClick={() => successToast("성공적으로 수정되었습니다.")}>
-          성공
-        </button>
-        <button onClick={() => errorToast("수정에 실패하였습니다.")}>
-          실패
-        </button>
-      </div>
-      <Empty
-        message="등록된 데이터가 없습니다."
-        button={<Button>Open API 연동</Button>}
-      /> */}
       <DataManagementHeader />
       <DataManagementFilter />
       <DataManagementTable onDelete={onDeleteClick} onEdit={onEditClick} />

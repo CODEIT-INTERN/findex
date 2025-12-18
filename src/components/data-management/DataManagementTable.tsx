@@ -114,25 +114,29 @@ export default function DataManagementTable({
         <Table.Body items={sortedItems}>
           {(item) => (
             <Table.Row id={item.id} key={item.id}>
-              <Table.Cell>{item.baseDate}</Table.Cell>
-              <Table.Cell>{item.marketPrice}</Table.Cell>
+              <Table.Cell className="min-w-35">{item.baseDate}</Table.Cell>
+              <Table.Cell>{item.marketPrice.toLocaleString("kr")}</Table.Cell>
               <Table.Cell>{item.closingPrice}</Table.Cell>
               <Table.Cell>{item.highPrice}</Table.Cell>
               <Table.Cell>{item.lowPrice}</Table.Cell>
-              <Table.Cell>{item.tradingQuantity}</Table.Cell>
+              <Table.Cell>
+                {item.tradingQuantity.toLocaleString("kr")}
+              </Table.Cell>
               <Table.Cell>{item.versus}</Table.Cell>
               <Table.Cell>{item.fluctuationRate}</Table.Cell>
               <Table.Cell>{item.sourceType}</Table.Cell>
-              <Table.Cell>
-                <div className="flex justify-end gap-0.5">
+              <Table.Cell className="max-w-26">
+                <div className="inline-flex justify-end gap-0.5">
                   <Button
                     color="tertiary"
                     iconLeading={Trash01}
+                    className="size-7 text-gray-400"
                     onClick={() => onDelete(item)}
                   />
                   <Button
                     color="tertiary"
                     iconLeading={Edit01}
+                    className="size-7 text-gray-400"
                     onClick={() => onEdit(item)}
                   />
                 </div>
