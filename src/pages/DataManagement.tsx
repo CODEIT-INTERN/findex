@@ -10,19 +10,19 @@ export default function DataManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
-  // 부서 추가 모달 열기
+  // 데이터 관리 추가 모달 열기
   const onAddClick = () => {
     setSelected(null);
     setIsModalOpen(true);
   };
 
-  // 부서 수정 모달 열기
+  // 데이터 관리수정 모달 열기
   const onEditClick = (item: IndexDataDto) => {
     setSelected(item);
     setIsModalOpen(true);
   };
 
-  // 부서 삭제 확인 모달 열기
+  // 데이터 관리 삭제 확인 모달 열기
   const onDeleteClick = (item: IndexDataDto) => {
     setDeleteTarget(item);
     setIsConfirmOpen(true);

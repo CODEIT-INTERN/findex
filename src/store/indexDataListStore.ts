@@ -15,8 +15,13 @@ interface IndexDataListState {
   fetch: (params?: IndexDataListParams) => Promise<void>;
   fetchNext: () => Promise<void>;
   setFilters: (filters: Partial<IndexDataListParams>) => void;
-  reset: () => void;
+  resetFilters: () => void;
 }
+
+const initialFilters: IndexDataListParams = {
+  sortField: "baseDate",
+  sortDirection: "desc",
+};
 
 export const useIndexDataListStore = create<IndexDataListState>((set, get) => ({
   items: [],
@@ -26,10 +31,7 @@ export const useIndexDataListStore = create<IndexDataListState>((set, get) => ({
   idAfter: 0,
   nextCursor: null,
   totalElements: 0,
-  filters: {
-    sortField: "baseDate",
-    sortDirection: "desc",
-  },
+  filters: initialFilters,
 
   fetch: async (params) => {
     set({ isLoading: true, error: null });
@@ -89,12 +91,9 @@ export const useIndexDataListStore = create<IndexDataListState>((set, get) => ({
     }));
   },
 
-  reset: () => {
+  resetFilters: () => {
     set({
-      items: [],
-      isLoading: false,
-      error: null,
-      filters: {},
+      filters: initialFilters,
     });
   },
 }));
