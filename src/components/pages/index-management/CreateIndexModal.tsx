@@ -70,7 +70,7 @@ const CreateIndexModal = ({ isOpen, onOpenChange }: CreateIndexModalProps) => {
         basePointInTime: null,
         employedItemsCount: "",
         baseIndex: "",
-        favorite: false,
+        favorite: true,
       });
     } catch (err) {
       console.error(err);
@@ -81,7 +81,9 @@ const CreateIndexModal = ({ isOpen, onOpenChange }: CreateIndexModalProps) => {
   const isFormValid =
     formData.indexClassification &&
     formData.indexName &&
-    formData.basePointInTime;
+    formData.basePointInTime &&
+    formData.employedItemsCount &&
+    formData.baseIndex;
   return (
     <>
       <BaseModal
@@ -143,7 +145,6 @@ const CreateIndexModal = ({ isOpen, onOpenChange }: CreateIndexModalProps) => {
                 onChange={(value) => handleChange("employedItemsCount", value)}
                 isRequired
                 isInvalid={isEmpty(formData.employedItemsCount)}
-                // hint={errors.position}
               />
               <Input
                 label="기준 지수"
