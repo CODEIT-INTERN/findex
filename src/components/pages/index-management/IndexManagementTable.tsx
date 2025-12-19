@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { Edit01, RefreshCcw05, Star01, Trash01 } from "@untitledui/icons";
+import { deleteIndexInfo } from "@/api/indexInfoApi";
 import { Button } from "@/components/common/buttons/Button";
 import { Empty } from "@/components/common/Empty";
 import ConfirmModal from "@/components/common/modals/ConfirmModal";
@@ -8,18 +9,30 @@ import { Table } from "@/components/common/table/Table";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { IndexInfoResponse } from "@/model/indexInfo";
 import { useIndexIndexListStore } from "@/store/indexInfoListStore";
+import { useToastStore } from "@/store/toastStore";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
+import UpdateIndexModal from "./UpdateIndexModal";
 
 const IndexTable = () => {
   const { items, isLoading, error, hasNext, filters, fetch, fetchNext } =
     useIndexIndexListStore();
-
   // 테이블 정렬
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "indexClassification",
     direction: "descending",
   });
-
+  // 선택된 지수 id
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedItem, setSelectedItem] = useState<IndexInfoResponse | null>(
+    null,
+  );
+  //   // 모달 상태들
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isLinkModalOpen, setLinkModalOpen] = useState(false);
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  // 성공, 에러 토스트
+  const successToast = useToastStore((state) => state.successToast);
+  const errorToast = useToastStore((state) => state.errorToast);
   // 무한 스크롤 유틸
   const { loadMoreRef } = useInfiniteScroll({
     hasNext,
@@ -39,13 +52,31 @@ const IndexTable = () => {
 
   const hasNoData = !isLoading && !error && sortedItems.length === 0;
 
-  // 모달 상태들
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [isLinkModalOpen, setLinkModalOpen] = useState(false);
+  // 삭제 버튼 클릭 핸들러
+  const onClickDelete = (id: number) => {
+    setSelectedId(id);
+    setDeleteModalOpen(true);
+  };
+  // 수정 버튼 클릭 핸들러
+  const onClickUpdate = (item: IndexInfoResponse) => {
+    setSelectedItem(item); // 📍 선택된 아이템 전체를 저장
+    setUpdateModalOpen(true);
+  };
 
-  // 삭제 핸들러
-  const handleDelete = () => {
-    setDeleteModalOpen(false);
+  // 삭제 API 호출 핸들러
+  const handleDelete = async () => {
+    if (selectedId === null) return;
+
+    try {
+      await deleteIndexInfo(selectedId);
+      fetch();
+      setDeleteModalOpen(false);
+      setSelectedId(null);
+      successToast("성공적으로 삭제되었습니다.");
+    } catch (err) {
+      console.error("삭제 실패:", err);
+      errorToast("삭제 처리 중 오류가 발생했습니다.");
+    }
   };
   // 연동 핸들러
   const handleLink = () => {
@@ -149,13 +180,13 @@ const IndexTable = () => {
                     <div className="flex justify-end gap-0.5">
                       <Button
                         color="tertiary"
-                        iconLeading={Trash01}
-                        onClick={() => setDeleteModalOpen(true)}
+                        iconLeading={<Trash01 size={20} stroke="#A4A7AE" />}
+                        onClick={() => onClickDelete(item.id)}
                       />
                       <Button
                         color="tertiary"
-                        iconLeading={Edit01}
-                        onClick={() => setLinkModalOpen(true)}
+                        iconLeading={<Edit01 size={20} stroke="#A4A7AE" />}
+                        onClick={() => onClickUpdate(item)}
                       />
                     </div>
                   </Table.Cell>
@@ -174,10 +205,13 @@ const IndexTable = () => {
       )}
 
       {/* -------------------------모달------------------------ */}
-      {/* 삭제 컨펌 모달 */}
+      {/* 삭제 모달 */}
       <ConfirmModal
         isOpen={isDeleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setSelectedId(null);
+        }}
         onConfirm={handleDelete}
         title="지수 정보 삭제"
       >
@@ -186,7 +220,19 @@ const IndexTable = () => {
         </p>
       </ConfirmModal>
 
-      {/* 연동 컨펌 모달 */}
+      {/* 수정 모달 */}
+      {isUpdateModalOpen && selectedItem && (
+        <UpdateIndexModal
+          isOpen={isUpdateModalOpen}
+          onOpenChange={(open) => {
+            setUpdateModalOpen(open);
+            if (!open) setSelectedItem(null);
+          }}
+          initialData={selectedItem}
+        />
+      )}
+
+      {/* 지수 연동 모달 */}
       <ConfirmModal
         isOpen={isLinkModalOpen}
         onClose={() => setLinkModalOpen(false)}
