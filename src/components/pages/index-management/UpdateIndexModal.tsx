@@ -66,7 +66,6 @@ const UpdateIndexModal = ({
     } catch (err) {
       console.error(err);
       errorToast("수정에 실패했습니다.");
-    } finally {
     }
   };
 
