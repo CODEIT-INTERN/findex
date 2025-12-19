@@ -9,7 +9,7 @@ import { useToastStore } from "@/store/toastStore";
 import CreateIndexModal from "./CreateIndexModal";
 
 export const IndexHeader = () => {
-  const { fetch } = useIndexIndexListStore();
+  const { fetch, totalElements } = useIndexIndexListStore();
   const { successToast, errorToast } = useToastStore();
   // 모달 및 상태관리
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
@@ -21,9 +21,6 @@ export const IndexHeader = () => {
     successCount: 0,
     failCount: 0,
   });
-  const handleCreate = () => {
-    setCreateModalOpen(false);
-  };
   const handleSync = async () => {
     try {
       const { successCount, failCount } = await syncIndexInfo();
@@ -41,7 +38,7 @@ export const IndexHeader = () => {
     <div className="border-secondary flex justify-between border-b px-6 py-5">
       <div className="flex flex-col gap-0.5">
         <p className="text-lg font-semibold">지수 목록</p>
-        <p className="text-tertiary text-sm">총 102개</p>
+        <p className="text-tertiary text-sm">총 {totalElements}개</p>
       </div>
       <div className="flex gap-3">
         <Button
