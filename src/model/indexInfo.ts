@@ -15,8 +15,8 @@ export interface IndexInfoListParams {
 // 지수 정보 상세 조회
 export interface IndexInfoResponse {
   id: number;
-  indexClassification: string;
-  indexName: string;
+  indexClassification?: string;
+  indexName?: string;
   employedItemsCount: number;
   // "YYYY-MM-DD"
   basePointInTime: string;
