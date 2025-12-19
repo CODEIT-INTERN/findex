@@ -89,6 +89,7 @@ export const IndexHeader = () => {
         title="지수 정보 연동"
         variant="primary"
         isSingleButton
+        confirmText="확인"
       >
         <div className="text-text-tertiary flex flex-col text-sm">
           <div className="flex items-center justify-start gap-1">
