@@ -43,3 +43,14 @@ export interface UpdateIndexInfoRequest {
   baseIndex: number;
   favorite: boolean;
 }
+
+// 지수 연동
+export interface SyncIndexResponse {
+  id: number;
+  jobType: string;
+  indexInfoId: number;
+  targetDate: string | null;
+  worker: string;
+  jobTime: string;
+  result: "SUCCESS" | "FAIL";
+}
