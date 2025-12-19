@@ -40,10 +40,12 @@ export const IndexHeader = () => {
       </div>
       {/* -------------------------모달------------------------ */}
       {/* 지수 등록 모달 */}
-      <CreateIndexModal
-        isOpen={isCreateModalOpen}
-        onOpenChange={setCreateModalOpen}
-      />
+      {isCreateModalOpen && (
+        <CreateIndexModal
+          isOpen={isCreateModalOpen}
+          onOpenChange={setCreateModalOpen}
+        />
+      )}
 
       {/* 지수 연동 모달 */}
       <ConfirmModal
