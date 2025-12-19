@@ -64,7 +64,7 @@ const ConfirmModal = ({
       <div className="flex justify-between gap-3">
         {!isSingleButton && (
           <Button color="secondary" className="w-full" onClick={onClose}>
-            취소
+            확인
           </Button>
         )}
         <Button
