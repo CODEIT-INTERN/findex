@@ -24,7 +24,7 @@ interface DatePickerProps extends AriaDatePickerProps<DateValue> {
   onApply?: () => void;
   /** The function to call when the cancel button is clicked. */
   onCancel?: () => void;
-  placeholder: string;
+  placeholder?: string;
 }
 
 export const DatePicker = ({

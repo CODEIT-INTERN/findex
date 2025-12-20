@@ -15,8 +15,8 @@ export interface IndexInfoListParams {
 // 지수 정보 상세 조회
 export interface IndexInfoResponse {
   id: number;
-  indexClassification: string;
-  indexName: string;
+  indexClassification?: string;
+  indexName?: string;
   employedItemsCount: number;
   // "YYYY-MM-DD"
   basePointInTime: string;
@@ -42,4 +42,15 @@ export interface UpdateIndexInfoRequest {
   basePointInTime: string;
   baseIndex: number;
   favorite: boolean;
+}
+
+// 지수 연동
+export interface SyncIndexResponse {
+  id: number;
+  jobType: string;
+  indexInfoId: number;
+  targetDate: string | null;
+  worker: string;
+  jobTime: string;
+  result: "SUCCESS" | "FAIL";
 }
