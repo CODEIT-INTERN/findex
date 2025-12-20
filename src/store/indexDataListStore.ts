@@ -89,9 +89,16 @@ export const useIndexDataListStore = create<IndexDataListState>((set, get) => ({
   },
 
   setFilters: (newFilters) => {
-    set((state) => ({
-      filters: { ...state.filters, ...newFilters },
-    }));
+    set((state) => {
+      const updatedFilters = { ...state.filters, ...newFilters };
+
+      // indexInfoId가 -1이면 제거
+      if (updatedFilters.indexInfoId === -1) {
+        delete updatedFilters.indexInfoId;
+      }
+
+      return { filters: updatedFilters };
+    });
   },
 
   resetFilters: () => {

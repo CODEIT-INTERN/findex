@@ -2,6 +2,7 @@ import type {
   CreateIndexInfoRequest,
   IndexInfoListParams,
   IndexInfoResponse,
+  IndexInfoSummary,
   UpdateIndexInfoRequest,
 } from "@/model/indexInfo";
 import type { CursorPageResponse } from "@/model/pagination";
@@ -28,4 +29,9 @@ export const createIndexInfo = (data: CreateIndexInfoRequest) => {
 // 지수 정보 수정
 export const updateIndexInfo = (id: number, data: UpdateIndexInfoRequest) => {
   return apiClient.patch<IndexInfoResponse>(`/index-infos/${id}`, data);
+};
+
+// 지수 정보 요약 목록 조회
+export const getIndexInfoSummaries = () => {
+  return apiClient.get<IndexInfoSummary[]>("/index-infos/summaries");
 };

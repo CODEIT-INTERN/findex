@@ -1,5 +1,5 @@
 import type { FC, ReactNode, Ref, RefAttributes } from "react";
-import { createContext, isValidElement } from "react";
+import { createContext, isValidElement, useMemo, useState } from "react";
 import type { SelectProps as AriaSelectProps } from "react-aria-components";
 import {
   Button as AriaButton,
@@ -7,17 +7,17 @@ import {
   Select as AriaSelect,
   SelectValue as AriaSelectValue,
 } from "react-aria-components";
-import { ChevronDown } from "@untitledui/icons";
+import { ChevronDown, SearchMd } from "@untitledui/icons";
 import { cx } from "@/utils/cx";
 import { isReactComponent } from "@/utils/is-react-component";
 import { HintText } from "../input/HintText";
+import { Input } from "../input/Input";
 import { Label } from "../input/Label";
-import { ComboBox } from "./combobox";
 import { Popover } from "./popover";
-import { SelectItem } from "./select-item";
+import { SelectItem } from "./SelectItem";
 
 export type SelectItemType = {
-  id: string;
+  id: number;
   label?: string;
   avatarUrl?: string;
   isDisabled?: boolean;
@@ -41,6 +41,8 @@ interface SelectProps
   items?: SelectItemType[];
   popoverClassName?: string;
   placeholderIcon?: FC | ReactNode;
+  searchable?: boolean;
+  searchPlaceholder?: string;
   children: ReactNode | ((item: SelectItemType) => ReactNode);
 }
 
@@ -54,9 +56,37 @@ interface SelectValueProps {
   placeholderIcon?: FC | ReactNode;
 }
 
+interface SearchInputProps {
+  size: "sm" | "md";
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}
+
 const sizes = {
   sm: { root: "py-2 px-3", shortcut: "pr-2.5" },
   md: { root: "py-2.5 px-3.5", shortcut: "pr-3" },
+};
+
+const SearchInput = ({
+  size,
+  value,
+  onChange,
+  placeholder = "Search...",
+}: SearchInputProps) => {
+  return (
+    <div className="p-2">
+      <Input
+        size={size}
+        icon={SearchMd}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        wrapperClassName="shadow-none"
+        autoFocus
+      />
+    </div>
+  );
 };
 
 const SelectValue = ({
@@ -80,10 +110,7 @@ const SelectValue = ({
       <AriaSelectValue<SelectItemType>
         className={cx(
           "flex h-max w-full items-center justify-start gap-2 truncate text-left align-middle",
-
-          // Icon styles
           "*:data-icon:text-fg-quaternary in-disabled:*:data-icon:text-fg-disabled *:data-icon:size-5 *:data-icon:shrink-0",
-
           sizes[size].root,
         )}
       >
@@ -134,7 +161,10 @@ const SelectValue = ({
   );
 };
 
-const SelectContext = createContext<{ size: "sm" | "md" }>({ size: "sm" });
+// eslint-disable-next-line react-refresh/only-export-components
+export const SelectContext = createContext<{ size: "sm" | "md" }>({
+  size: "sm",
+});
 
 const Select = ({
   placeholder = "Select",
@@ -146,12 +176,41 @@ const Select = ({
   hint,
   tooltip,
   className,
+  searchable = false,
+  searchPlaceholder = "검색",
   ...rest
 }: SelectProps) => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // 검색어로 items 필터링
+  const filteredItems = useMemo(() => {
+    if (!searchable || !searchQuery.trim() || !items) {
+      return items;
+    }
+
+    const query = searchQuery.toLowerCase();
+    return items.filter((item) => {
+      const labelMatch = item.label?.toLowerCase().includes(query);
+      const supportingTextMatch = item.supportingText
+        ?.toLowerCase()
+        .includes(query);
+      return labelMatch || supportingTextMatch;
+    });
+  }, [items, searchQuery, searchable]);
+
+  // Popover가 닫힐 때 검색어 리셋
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      setSearchQuery("");
+    }
+    rest.onOpenChange?.(isOpen);
+  };
+
   return (
     <SelectContext.Provider value={{ size }}>
       <AriaSelect
         {...rest}
+        onOpenChange={handleOpenChange}
         className={(state) =>
           cx(
             "flex flex-col gap-1.5",
@@ -174,7 +233,18 @@ const Select = ({
             />
 
             <Popover size={size} className={rest.popoverClassName}>
-              <AriaListBox items={items} className="size-full outline-hidden">
+              {searchable && (
+                <SearchInput
+                  size={size}
+                  value={searchQuery}
+                  onChange={setSearchQuery}
+                  placeholder={searchPlaceholder}
+                />
+              )}
+              <AriaListBox
+                items={filteredItems}
+                className="size-full outline-hidden"
+              >
                 {children}
               </AriaListBox>
             </Popover>
@@ -188,10 +258,8 @@ const Select = ({
 };
 
 const _Select = Select as typeof Select & {
-  ComboBox: typeof ComboBox;
   Item: typeof SelectItem;
 };
-_Select.ComboBox = ComboBox;
 _Select.Item = SelectItem;
 
 export { _Select as Select };

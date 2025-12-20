@@ -89,6 +89,6 @@ export const downloadIndexDataCSV = (params?: IndexDataExportParams) => {
 /**
  * 지수 데이터 연동
  */
-export const syncIndexData = (body) => {
+export const syncIndexData = (body: unknown) => {
   return apiClient.post("/sync-jobs/index-data", body);
 };

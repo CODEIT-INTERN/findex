@@ -43,3 +43,9 @@ export interface UpdateIndexInfoRequest {
   baseIndex: number;
   favorite: boolean;
 }
+
+export interface IndexInfoSummary {
+  id: number;
+  indexClassification: string;
+  indexName: string;
+}

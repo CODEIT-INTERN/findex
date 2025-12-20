@@ -1,16 +1,12 @@
 import { useState } from "react";
-import type { DateRange, DateValue } from "react-aria-components";
+import type { DateRange } from "react-aria-components";
 import { DateRangePicker } from "@/components/common/date-picker/DateRangePicker";
-import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useIndexDataListStore } from "@/store/indexDataListStore";
-import { formatDateRange, formatDateValueToIsoZ } from "@/utils/date";
+import { formatDateRange } from "@/utils/date";
+import IndexInfoSelect from "../common/select/IndexInfoSelect";
 
 export default function DataManagementFilter() {
-  const [keyword, setKeyword] = useState("");
   const [tempDateRange, setTempDateRange] = useState<DateRange | null>(null);
-
-  // 디바운스
-  const debouncedKeyword = useDebouncedValue(keyword);
 
   const { setFilters } = useIndexDataListStore();
 
@@ -38,8 +34,20 @@ export default function DataManagementFilter() {
     });
   };
 
+  const handleSelectChange = (id: number) => {
+    setFilters({
+      indexInfoId: id,
+    });
+  };
+
   return (
-    <div className="px-6 py-5">
+    <div className="flex gap-3 px-6 py-5">
+      <IndexInfoSelect
+        placeholder="전체 지수"
+        onChange={(key) => handleSelectChange(key as number)}
+        aria-label="지수 선택"
+        className="w-42"
+      />
       <DateRangePicker
         aria-label="날짜 선택"
         placeholder="날짜를 선택해주세요"
