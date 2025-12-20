@@ -13,7 +13,7 @@ import { isReactComponent } from "@/utils/is-react-component";
 import { HintText } from "../input/HintText";
 import { Input } from "../input/Input";
 import { Label } from "../input/Label";
-import { Popover } from "./popover";
+import { Popover } from "./Popover";
 import { SelectItem } from "./SelectItem";
 
 export type SelectItemType = {
