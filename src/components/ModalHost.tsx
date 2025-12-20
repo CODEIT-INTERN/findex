@@ -3,6 +3,7 @@
 import { useModalStore } from "@/store/modalStore";
 import ConfirmModal from "./common/modals/ConfirmModal";
 import IndexDataModal from "./data-management/IndexDataModal";
+import IndexDataSyncModal from "./data-management/IndexDataSyncModal";
 
 export function ModalHost() {
   const { modal, close } = useModalStore();
@@ -15,6 +16,7 @@ export function ModalHost() {
         <ConfirmModal
           isOpen
           title={modal.props.title}
+          variant={modal.props.variant}
           onClose={close}
           onConfirm={async () => {
             await modal.props.onConfirm();
@@ -33,6 +35,11 @@ export function ModalHost() {
           mode={modal.props.mode}
           initial={modal.props.initial}
         />
+      );
+
+    case "indexDataSync":
+      return (
+        <IndexDataSyncModal isOpen onClose={close} index={modal.props.index} />
       );
 
     default:

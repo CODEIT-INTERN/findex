@@ -1,7 +1,4 @@
 import { useState } from "react";
-import { getLocalTimeZone, today } from "@internationalized/date";
-import { useControlledState } from "@react-stately/utils";
-import { Calendar as CalendarIcon } from "@untitledui/icons";
 import { useDateFormatter } from "react-aria";
 import type {
   DateRangePickerProps as AriaDateRangePickerProps,
@@ -13,6 +10,9 @@ import {
   Group as AriaGroup,
   Popover as AriaPopover,
 } from "react-aria-components";
+import { getLocalTimeZone, today } from "@internationalized/date";
+import { useControlledState } from "@react-stately/utils";
+import { Calendar as CalendarIcon } from "@untitledui/icons";
 import { Button } from "@/components/common/buttons/Button";
 import { cx } from "@/utils/cx";
 import { DateInput } from "./DateInput";
@@ -45,7 +45,7 @@ export const DateRangePicker = ({
   const [value, setValue] = useControlledState(
     valueProp,
     defaultValue || null,
-    onChange
+    onChange,
   );
   const [focusedValue, setFocusedValue] = useState<DateValue | null>(null);
 
@@ -84,13 +84,13 @@ export const DateRangePicker = ({
           cx(
             "origin-(--trigger-anchor-point) will-change-transform",
             isEntering &&
-              "duration-150 ease-out animate-in fade-in placement-right:slide-in-from-left-0.5 placement-top:slide-in-from-bottom-0.5 placement-bottom:slide-in-from-top-0.5",
+              "animate-in fade-in placement-right:slide-in-from-left-0.5 placement-top:slide-in-from-bottom-0.5 placement-bottom:slide-in-from-top-0.5 duration-150 ease-out",
             isExiting &&
-              "duration-100 ease-in animate-out fade-out placement-right:slide-out-to-left-0.5 placement-top:slide-out-to-bottom-0.5 placement-bottom:slide-out-to-top-0.5"
+              "animate-out fade-out placement-right:slide-out-to-left-0.5 placement-top:slide-out-to-bottom-0.5 placement-bottom:slide-out-to-top-0.5 duration-100 ease-in",
           )
         }
       >
-        <AriaDialog className="flex rounded-2xl bg-primary shadow-xl ring ring-secondary_alt focus:outline-hidden">
+        <AriaDialog className="bg-primary ring-secondary_alt flex rounded-2xl shadow-xl ring focus:outline-hidden">
           {({ close }) => (
             <>
               <div className="flex flex-col">
@@ -99,7 +99,7 @@ export const DateRangePicker = ({
                   onFocusChange={setFocusedValue}
                   highlightedDates={highlightedDates}
                 />
-                <div className="flex justify-between gap-3 border-t border-secondary p-4">
+                <div className="border-secondary flex justify-between gap-3 border-t p-4">
                   <div className="hidden items-center gap-3">
                     <DateInput slot="start" className="w-36" />
                     <div className="text-md text-quaternary">–</div>

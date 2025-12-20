@@ -4,6 +4,7 @@ import type {
   IndexDataDto,
   IndexDataExportParams,
   IndexDataListParams,
+  IndexDataSyncRequest,
   IndexDataUpdateRequest,
   IndexPerformanceDto,
   PeriodType,
@@ -89,6 +90,6 @@ export const downloadIndexDataCSV = (params?: IndexDataExportParams) => {
 /**
  * 지수 데이터 연동
  */
-export const syncIndexData = (body: unknown) => {
-  return apiClient.post("/sync-jobs/index-data", body);
+export const syncIndexData = (data: IndexDataSyncRequest) => {
+  return apiClient.post("/sync-jobs/index-data", data);
 };

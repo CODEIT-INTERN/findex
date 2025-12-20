@@ -11,7 +11,7 @@ export function ToastContainer() {
   if (!toast) return null;
 
   return (
-    <div className="pointer-events-none fixed bottom-21 left-1/2 z-50 -translate-x-1/2">
+    <div className="pointer-events-none fixed bottom-21 left-1/2 z-9999 -translate-x-1/2">
       <Toast
         type={toast.type}
         message={toast.message}
