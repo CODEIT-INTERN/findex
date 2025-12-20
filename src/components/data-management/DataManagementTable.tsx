@@ -16,7 +16,7 @@ export default function DataManagementTable() {
   const { items, isLoading, error, hasNext, filters, fetch, fetchNext } =
     useIndexDataListStore();
   const { successToast, errorToast } = useToastStore();
-  const { openConfirm, close } = useModalStore();
+  const { openConfirm, openIndexDataForm, close } = useModalStore();
 
   // 테이블 정렬
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -62,8 +62,15 @@ export default function DataManagementTable() {
     });
   };
 
+  const handleEditClick = (indexData: IndexDataDto) => {
+    openIndexDataForm({
+      mode: "edit",
+      initial: indexData,
+    });
+  };
+
   useEffect(() => {
-    fetch();
+    void fetch();
   }, [fetch, filters]);
 
   const hasNoData = !isLoading && !error && sortedItems.length === 0;
@@ -160,7 +167,7 @@ export default function DataManagementTable() {
                     color="tertiary"
                     iconLeading={Edit01}
                     className="size-7 text-gray-400"
-                    onClick={() => {}}
+                    onClick={() => handleEditClick(item)}
                   />
                 </div>
               </Table.Cell>

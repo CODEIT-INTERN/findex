@@ -1,29 +1,23 @@
 import type { ReactNode } from "react";
 import { create } from "zustand";
+import type { IndexDataDto } from "@/model/indexData";
 
-/** Confirm */
+type ModalState =
+  | { type: "confirm"; props: ConfirmProps }
+  | { type: "indexDataForm"; props: IndexDataModalProps };
+
+// Confirm
 interface ConfirmProps {
   title: string;
   description: ReactNode;
   onConfirm: () => void | Promise<void>;
 }
 
-/** Index Data Form */
-interface IndexDataFormValues {
-  indexId: string;
-  date: string;
-  value: number;
-}
-
+// IndexData
 interface IndexDataModalProps {
-  mode: "create" | "edit";
-  initial?: Partial<IndexDataFormValues>;
-  onSubmit: (values: IndexDataFormValues) => void | Promise<void>;
+  mode: "create" | "edit" | "view";
+  initial?: Partial<IndexDataDto>;
 }
-
-type ModalState =
-  | { type: "confirm"; props: ConfirmProps }
-  | { type: "indexDataForm"; props: IndexDataModalProps };
 
 interface ModalStore {
   modal: ModalState | null;

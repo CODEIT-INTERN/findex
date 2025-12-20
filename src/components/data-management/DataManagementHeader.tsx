@@ -2,12 +2,14 @@ import { Plus, RefreshCcw05, Share01 } from "@untitledui/icons";
 import { Button } from "@/components/common/buttons/Button";
 import type { IndexDataDto } from "@/model/indexData";
 import { useIndexDataListStore } from "@/store/indexDataListStore";
+import { useModalStore } from "@/store/modalStore";
 import { useToastStore } from "@/store/toastStore";
 
 export default function DataManagementHeader() {
   const { totalElements, isLoadingExport, exportData } =
     useIndexDataListStore();
   const { successToast, errorToast } = useToastStore();
+  const { openIndexDataForm } = useModalStore();
 
   const handleExportClick = async () => {
     try {
@@ -16,6 +18,12 @@ export default function DataManagementHeader() {
     } catch (error) {
       errorToast("다운로드에 실패하였습니다.");
     }
+  };
+
+  const handleAddClick = () => {
+    openIndexDataForm({
+      mode: "create",
+    });
   };
 
   return (
@@ -35,7 +43,11 @@ export default function DataManagementHeader() {
         >
           Export
         </Button>
-        <Button color="secondary" iconLeading={<Plus size={20} />}>
+        <Button
+          color="secondary"
+          iconLeading={<Plus size={20} />}
+          onClick={handleAddClick}
+        >
           데이터 등록
         </Button>
         <Button iconLeading={<RefreshCcw05 size={20} />}>Open API 연동</Button>

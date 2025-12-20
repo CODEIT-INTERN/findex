@@ -2,6 +2,7 @@
 
 import { useModalStore } from "@/store/modalStore";
 import ConfirmModal from "./common/modals/ConfirmModal";
+import IndexDataModal from "./data-management/IndexDataModal";
 
 export function ModalHost() {
   const { modal, close } = useModalStore();
@@ -24,19 +25,15 @@ export function ModalHost() {
         </ConfirmModal>
       );
 
-    // case "indexDataForm":
-    //   return (
-    //     <IndexDataRegisterModal
-    //       isOpen
-    //       onClose={close}
-    //       mode={modal.props.mode}
-    //       initial={modal.props.initial}
-    //       onSubmit={async (values) => {
-    //         await modal.props.onSubmit(values);
-    //         close();
-    //       }}
-    //     />
-    //   );
+    case "indexDataForm":
+      return (
+        <IndexDataModal
+          isOpen
+          onClose={close}
+          mode={modal.props.mode}
+          initial={modal.props.initial}
+        />
+      );
 
     default:
       return null;
