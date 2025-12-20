@@ -1,4 +1,3 @@
-import { useDateFormatter } from "react-aria";
 import type {
   DatePickerProps as AriaDatePickerProps,
   DateValue,
