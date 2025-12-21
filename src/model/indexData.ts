@@ -145,3 +145,12 @@ export interface IndexDataExportParams {
     | "marketTotalAmount";
   sortDirection?: "asc" | "desc";
 }
+
+/**
+ * 지수 데이터 연동 요청
+ */
+export interface IndexDataSyncRequest {
+  indexInfoIds: number[];
+  baseDateFrom: string;
+  baseDateTo: string;
+}

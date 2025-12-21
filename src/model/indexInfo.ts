@@ -44,6 +44,13 @@ export interface UpdateIndexInfoRequest {
   favorite: boolean;
 }
 
+// 지수 정보 요약
+export interface IndexInfoSummary {
+  id: number;
+  indexClassification: string;
+  indexName: string;
+}
+
 // 지수 연동
 export interface SyncIndexResponse {
   id: number;

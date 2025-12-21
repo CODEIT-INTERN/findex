@@ -1,24 +1,30 @@
 import { useEffect, useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
-import { Edit01, Trash01 } from "@untitledui/icons";
+import { Edit01, RefreshCcw05, Trash01 } from "@untitledui/icons";
+import { deleteIndexData } from "@/api/indexDataApi";
 import { Button } from "@/components/common/buttons/Button";
 import { Table } from "@/components/common/table/Table";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { IndexDataDto } from "@/model/indexData";
+import type { Index } from "@/pages/DataManagement";
 import { useIndexDataListStore } from "@/store/indexDataListStore";
+import { useModalStore } from "@/store/modalStore";
+import { useToastStore } from "@/store/toastStore";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
+import { Empty } from "../common/Empty";
 
 interface DataManagementTableProps {
-  onEdit: (item: IndexDataDto) => void;
-  onDelete: (item: IndexDataDto) => void;
+  index: Index | null;
 }
 
 export default function DataManagementTable({
-  onEdit,
-  onDelete,
+  index,
 }: DataManagementTableProps) {
   const { items, isLoading, error, hasNext, filters, fetch, fetchNext } =
     useIndexDataListStore();
+  const { successToast, errorToast } = useToastStore();
+  const { openConfirm, openIndexDataForm, openIndexDataSync, close } =
+    useModalStore();
 
   // 테이블 정렬
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -39,18 +45,69 @@ export default function DataManagementTable({
     return sortByDescriptor<IndexDataDto>(items, sortDescriptor);
   }, [items, sortDescriptor]);
 
+  // 지수 데이터 삭제
+  const handleDeleteIndexData = async (id: number) => {
+    if (!id) return;
+    try {
+      await deleteIndexData(id);
+      successToast("성공적으로 삭제되었습니다.");
+      await fetch();
+    } catch (error) {
+      console.log(error);
+      errorToast("삭제에 실패하였습니다.");
+    } finally {
+      close();
+    }
+  };
+
+  // 지수 상세 모달 열기
+  const handleRowClick = (indexData: IndexDataDto) => {
+    openIndexDataForm({
+      mode: "view",
+      initial: indexData,
+    });
+  };
+
+  // 지수 삭제 핸들러
+  const handleDeleteClick = (id: number) => {
+    openConfirm({
+      title: "지수 데이터 삭제",
+      description: "정말로 이 지수 데이터를 삭제하겠습니까?",
+      onConfirm: () => {
+        handleDeleteIndexData(id);
+      },
+    });
+  };
+
+  // 지수 수정 모달 열기
+  const handleEditClick = (indexData: IndexDataDto) => {
+    openIndexDataForm({
+      mode: "edit",
+      initial: indexData,
+    });
+  };
+
+  // 지수 연동 클릭
+  const handleSyncApiClick = () => {
+    if (!index) return;
+    openIndexDataSync({
+      index: index,
+    });
+  };
+
   useEffect(() => {
-    fetch();
+    void fetch();
   }, [fetch, filters]);
 
   const hasNoData = !isLoading && !error && sortedItems.length === 0;
 
   return (
-    <div className="scrollbar-thin flex-1 overflow-auto">
+    <div className="scrollbar-thin flex flex-1 flex-col overflow-auto">
       <Table
         aria-label="데이터 목록"
         sortDescriptor={sortDescriptor}
         onSortChange={setSortDescriptor}
+        selectionMode="none"
       >
         <Table.Header>
           <Table.Head
@@ -113,27 +170,38 @@ export default function DataManagementTable({
 
         <Table.Body items={sortedItems}>
           {(item) => (
-            <Table.Row id={item.id} key={item.id}>
-              <Table.Cell>{item.baseDate}</Table.Cell>
-              <Table.Cell>{item.marketPrice}</Table.Cell>
+            <Table.Row
+              id={item.id}
+              key={item.id}
+              onAction={() => handleRowClick(item)}
+              className="hover:cursor-pointer"
+            >
+              <Table.Cell className="min-w-35">{item.baseDate}</Table.Cell>
+              <Table.Cell>
+                {item.marketPrice.toLocaleString("ko-KR")}
+              </Table.Cell>
               <Table.Cell>{item.closingPrice}</Table.Cell>
               <Table.Cell>{item.highPrice}</Table.Cell>
               <Table.Cell>{item.lowPrice}</Table.Cell>
-              <Table.Cell>{item.tradingQuantity}</Table.Cell>
+              <Table.Cell>
+                {item.tradingQuantity.toLocaleString("ko-KR")}
+              </Table.Cell>
               <Table.Cell>{item.versus}</Table.Cell>
               <Table.Cell>{item.fluctuationRate}</Table.Cell>
               <Table.Cell>{item.sourceType}</Table.Cell>
-              <Table.Cell>
-                <div className="flex justify-end gap-0.5">
+              <Table.Cell className="max-w-26">
+                <div className="inline-flex justify-end gap-0.5">
                   <Button
                     color="tertiary"
                     iconLeading={Trash01}
-                    onClick={() => onDelete(item)}
+                    className="size-7 text-gray-400"
+                    onClick={() => handleDeleteClick(item.id)}
                   />
                   <Button
                     color="tertiary"
                     iconLeading={Edit01}
-                    onClick={() => onEdit(item)}
+                    className="size-7 text-gray-400"
+                    onClick={() => handleEditClick(item)}
                   />
                 </div>
               </Table.Cell>
@@ -150,8 +218,18 @@ export default function DataManagementTable({
       </div>
 
       {hasNoData && (
-        <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
-          <span className="text-disabled">현재 표시할 부서가 없습니다</span>
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <Empty
+            message="등록된 데이터가 없습니다"
+            button={
+              <Button
+                iconLeading={<RefreshCcw05 size={20} />}
+                onClick={handleSyncApiClick}
+              >
+                Open API 연동
+              </Button>
+            }
+          />
         </div>
       )}
     </div>

@@ -1,0 +1,31 @@
+import { create } from "zustand";
+import { getIndexInfoSummaries } from "@/api/indexInfoApi";
+import type { IndexInfoSummary } from "@/model/indexInfo";
+
+interface IndexInfoSummaryState {
+  items: IndexInfoSummary[];
+  isLoading: boolean;
+  error: Error | null;
+  fetch: () => Promise<void>;
+}
+
+export const useIndexInfoSummaryStore = create<IndexInfoSummaryState>(
+  (set, _get) => ({
+    items: [],
+    isLoading: false,
+    error: null,
+    fetch: async () => {
+      set({ isLoading: true, error: null });
+
+      try {
+        const data = await getIndexInfoSummaries();
+        set({
+          items: data,
+          isLoading: false,
+        });
+      } catch (error) {
+        set({ error: error as Error, isLoading: false });
+      }
+    },
+  }),
+);

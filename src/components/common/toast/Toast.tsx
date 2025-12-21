@@ -12,7 +12,7 @@ export default function Toast({ type, message }: ToastProps) {
 
   return (
     <div
-      className="pointer-events-auto flex w-fit items-center gap-2.5 rounded-xl border bg-black px-12 py-4 text-white"
+      className="pointer-events-auto flex w-fit items-center gap-2.5 rounded-xl bg-black px-12 py-4 text-white"
       role={isSuccess ? "status" : "alert"}
       aria-live={isSuccess ? "polite" : "assertive"}
     >

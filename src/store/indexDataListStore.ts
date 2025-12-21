@@ -1,10 +1,11 @@
 import { create } from "zustand";
-import { getIndexDataList } from "@/api/indexDataApi";
+import { downloadIndexDataCSV, getIndexDataList } from "@/api/indexDataApi";
 import type { IndexDataDto, IndexDataListParams } from "@/model/indexData";
 
 interface IndexDataListState {
   items: IndexDataDto[];
   isLoading: boolean;
+  isLoadingExport: boolean;
   error: Error | null;
   hasNext: boolean;
   idAfter: number;
@@ -16,6 +17,7 @@ interface IndexDataListState {
   fetchNext: () => Promise<void>;
   setFilters: (filters: Partial<IndexDataListParams>) => void;
   resetFilters: () => void;
+  exportData: (params?: IndexDataListParams) => Promise<void>;
 }
 
 const initialFilters: IndexDataListParams = {
@@ -26,6 +28,7 @@ const initialFilters: IndexDataListParams = {
 export const useIndexDataListStore = create<IndexDataListState>((set, get) => ({
   items: [],
   isLoading: false,
+  isLoadingExport: false,
   error: null,
   hasNext: false,
   idAfter: 0,
@@ -86,14 +89,64 @@ export const useIndexDataListStore = create<IndexDataListState>((set, get) => ({
   },
 
   setFilters: (newFilters) => {
-    set((state) => ({
-      filters: { ...state.filters, ...newFilters },
-    }));
+    set((state) => {
+      const updatedFilters = { ...state.filters, ...newFilters };
+
+      // indexInfoId가 -1이면 제거
+      if (updatedFilters.indexInfoId === -1) {
+        delete updatedFilters.indexInfoId;
+      }
+
+      return { filters: updatedFilters };
+    });
   },
 
   resetFilters: () => {
     set({
       filters: initialFilters,
     });
+  },
+
+  exportData: async () => {
+    const { filters, isLoading, isLoadingExport } = get();
+
+    if (isLoading || isLoadingExport) {
+      return;
+    }
+
+    set({ isLoadingExport: true });
+
+    const params: Partial<IndexDataListParams> = {
+      indexInfoId: filters.indexInfoId,
+      startDate: filters.startDate,
+      endDate: filters.endDate,
+      sortField: filters.sortField,
+      sortDirection: filters.sortDirection,
+    };
+
+    try {
+      const csvText = await downloadIndexDataCSV(params);
+
+      // 문자열을 Blob으로 변환
+      const blob = new Blob([csvText], { type: "text/csv;charset=utf-8;" });
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+
+      const fileName = `index-data-${new Date().toISOString().split("T")[0]}.csv`;
+      link.download = fileName;
+
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      set({ isLoadingExport: false });
+    } catch (error) {
+      console.log("CSV 다운로드 실패", error);
+      set({ isLoadingExport: false });
+      throw error;
+    }
   },
 }));
