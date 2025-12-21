@@ -1,5 +1,4 @@
-import { Toggle } from "@/components/common/toggle/toggle";
-import StatSection from "@/components/integrations/StatSection";
+import { StatSection } from "@/components/integrations/StatSection";
 
 export default function Integrations() {
   return (

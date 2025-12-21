@@ -51,7 +51,7 @@ export interface AutoSyncConfigParams {
   enabled?: boolean;
   idAfter?: number;
   cursor?: string;
-  sortField?: "targetDate" | "jobTime";
+  sortField?: "indexInfo" | "indexName";
   sortDirection?: "asc" | "desc";
   size?: number;
 }
