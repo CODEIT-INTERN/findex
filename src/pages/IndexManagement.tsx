@@ -1,10 +1,10 @@
-import IndexFilterSection from "@/components/pages/indexManagement/IndexManagementFilter";
-import IndexHeader from "@/components/pages/indexManagement/IndexManagementHeader";
-import IndexTable from "@/components/pages/indexManagement/IndexManagementTable";
+import IndexFilterSection from "@/components/pages/index-management/IndexManagementFilter";
+import IndexHeader from "@/components/pages/index-management/IndexManagementHeader";
+import IndexTable from "@/components/pages/index-management/IndexManagementTable";
 
 const IndexManagement = () => {
   return (
-    <div className="border-secondary rounded-xl border bg-white shadow-xs">
+    <div className="border-secondary flex h-full min-h-0 flex-col rounded-xl border bg-white shadow-xs">
       <IndexHeader />
       <IndexFilterSection />
       <IndexTable />

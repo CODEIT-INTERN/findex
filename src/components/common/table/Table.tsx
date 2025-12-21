@@ -165,7 +165,7 @@ const TableRow = <T extends object>({
       className={(state) =>
         cx(
           "outline-focus-ring hover:bg-secondary relative transition-colors after:pointer-events-none focus-visible:outline-2 focus-visible:-outline-offset-2",
-          "h-18",
+          "h-16",
           highlightSelectedRow && "selected:bg-secondary",
           "[&>td]:after:bg-border-secondary [&>td]:after:absolute [&>td]:after:inset-x-0 [&>td]:after:bottom-0 [&>td]:after:h-px [&>td]:after:w-full last:[&>td]:after:hidden [&>td]:focus-visible:after:opacity-0",
           typeof className === "function" ? className(state) : className,
@@ -193,7 +193,7 @@ const TableCell = ({ className, children, ...props }: TableCellProps) => {
       className={(state) =>
         cx(
           "text-tertiary outline-focus-ring relative text-sm focus-visible:z-1 focus-visible:outline-2 focus-visible:-outline-offset-2",
-          "px-6 py-4",
+          "px-5",
           typeof className === "function" ? className(state) : className,
         )
       }
