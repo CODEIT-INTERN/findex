@@ -35,7 +35,8 @@ export const updateIndexInfo = (id: number, data: UpdateIndexInfoRequest) => {
 // 지수 정보 요약 목록 조회
 export const getIndexInfoSummaries = () => {
   return apiClient.get<IndexInfoSummary[]>("/index-infos/summaries");
-  
+};
+
 // 지수 정보 삭제
 export const deleteIndexInfo = (id: number) => {
   return apiClient.delete<IndexInfoResponse>(`/index-infos/${id}`);
