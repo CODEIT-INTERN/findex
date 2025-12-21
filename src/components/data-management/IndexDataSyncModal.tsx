@@ -29,10 +29,6 @@ export default function IndexDataSyncModal({
   const handleDateChange = (value: DateRange | null) => {
     setDateRange(value);
   };
-  // 날짜 적용 핸들러
-  const handleDateApply = () => {
-    setDateRange(dateRange);
-  };
   // 날짜 취소 핸들러
   const handleDateCancel = () => {
     setDateRange(null);
@@ -81,7 +77,6 @@ export default function IndexDataSyncModal({
           placeholder="날짜를 선택해주세요"
           value={dateRange}
           onChange={(value) => handleDateChange(value)}
-          onApply={handleDateApply}
           onCancel={handleDateCancel}
           className="w-full"
         />

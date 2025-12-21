@@ -182,7 +182,7 @@ export default function IndexDataModal({
     <BaseModal isOpen={isOpen} onOpenChange={onClose} title="데이터 등록">
       <Form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="space-y-2">
-          <Label aria-label="날짜" isRequired>
+          <Label aria-label="지수" isRequired>
             지수
           </Label>
           <Select
@@ -201,7 +201,7 @@ export default function IndexDataModal({
         </div>
 
         <div className="space-y-2">
-          <Label aria-label="날짜" isRequired>
+          <Label aria-label="설립일" isRequired>
             설립일
           </Label>
           <DatePicker
@@ -272,7 +272,7 @@ export default function IndexDataModal({
             isDisabled={mode === "view"}
           />
           <Input
-            label="등랄률 (%)"
+            label="등락률 (%)"
             placeholder="0"
             type="text"
             inputMode="numeric"

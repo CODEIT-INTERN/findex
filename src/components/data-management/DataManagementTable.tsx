@@ -72,7 +72,7 @@ export default function DataManagementTable({
   const handleDeleteClick = (id: number) => {
     openConfirm({
       title: "지수 데이터 삭제",
-      description: "정말로 이 지수 데이터를 삭제하겠습니다까?",
+      description: "정말로 이 지수 데이터를 삭제하겠습니까?",
       onConfirm: () => {
         handleDeleteIndexData(id);
       },
