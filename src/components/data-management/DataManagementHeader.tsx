@@ -44,7 +44,7 @@ export default function DataManagementHeader({
       <div className="flex h-full shrink-0 flex-col justify-center max-sm:justify-start">
         <h2 className="text-lg leading-7 font-semibold">데이터 목록</h2>
         <span className="text-tertiary text-sm font-normal">
-          총 {totalElements.toLocaleString("kr")}개
+          총 {totalElements.toLocaleString("ko-KR")}개
         </span>
       </div>
       <div className="flex items-center gap-3 max-sm:flex-col max-sm:items-end">

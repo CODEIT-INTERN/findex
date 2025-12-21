@@ -177,12 +177,14 @@ export default function DataManagementTable({
               className="hover:cursor-pointer"
             >
               <Table.Cell className="min-w-35">{item.baseDate}</Table.Cell>
-              <Table.Cell>{item.marketPrice.toLocaleString("kr")}</Table.Cell>
+              <Table.Cell>
+                {item.marketPrice.toLocaleString("ko-KR")}
+              </Table.Cell>
               <Table.Cell>{item.closingPrice}</Table.Cell>
               <Table.Cell>{item.highPrice}</Table.Cell>
               <Table.Cell>{item.lowPrice}</Table.Cell>
               <Table.Cell>
-                {item.tradingQuantity.toLocaleString("kr")}
+                {item.tradingQuantity.toLocaleString("ko-KR")}
               </Table.Cell>
               <Table.Cell>{item.versus}</Table.Cell>
               <Table.Cell>{item.fluctuationRate}</Table.Cell>
