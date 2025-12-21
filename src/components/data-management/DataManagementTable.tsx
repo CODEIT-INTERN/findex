@@ -52,6 +52,15 @@ export default function DataManagementTable() {
     }
   };
 
+  // 지수 상세 모달 열기
+  const handleRowClick = (indexData: IndexDataDto) => {
+    openIndexDataForm({
+      mode: "view",
+      initial: indexData,
+    });
+  };
+
+  // 지수 삭제 핸들러
   const handleDeleteClick = (id: number) => {
     openConfirm({
       title: "지수 데이터 삭제",
@@ -62,6 +71,7 @@ export default function DataManagementTable() {
     });
   };
 
+  // 지수 수정 모달 열기
   const handleEditClick = (indexData: IndexDataDto) => {
     openIndexDataForm({
       mode: "edit",
@@ -81,6 +91,7 @@ export default function DataManagementTable() {
         aria-label="데이터 목록"
         sortDescriptor={sortDescriptor}
         onSortChange={setSortDescriptor}
+        selectionMode="none"
       >
         <Table.Header>
           <Table.Head
@@ -143,7 +154,12 @@ export default function DataManagementTable() {
 
         <Table.Body items={sortedItems}>
           {(item) => (
-            <Table.Row id={item.id} key={item.id}>
+            <Table.Row
+              id={item.id}
+              key={item.id}
+              onAction={() => handleRowClick(item)}
+              className="hover:cursor-pointer"
+            >
               <Table.Cell className="min-w-35">{item.baseDate}</Table.Cell>
               <Table.Cell>{item.marketPrice.toLocaleString("kr")}</Table.Cell>
               <Table.Cell>{item.closingPrice}</Table.Cell>

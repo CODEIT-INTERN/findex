@@ -212,7 +212,7 @@ export default function IndexDataModal({
             onApply={handleDateApply}
             onCancel={handleDateCancel}
             isInvalid={!!invalid.baseDate}
-            isDisabled={mode === "edit"}
+            isDisabled={mode !== "create"}
           />
         </div>
         <div className="grid grid-cols-2 gap-x-3 gap-y-4">
@@ -225,6 +225,7 @@ export default function IndexDataModal({
             onChange={(value) => handleChange("marketPrice", value)}
             isInvalid={!!invalid.marketPrice}
             isRequired
+            isDisabled={mode === "view"}
           />
           <Input
             label="종가"
@@ -235,6 +236,7 @@ export default function IndexDataModal({
             onChange={(value) => handleChange("closingPrice", value)}
             isInvalid={!!invalid.closingPrice}
             isRequired
+            isDisabled={mode === "view"}
           />
           <Input
             label="고가"
@@ -245,6 +247,7 @@ export default function IndexDataModal({
             onChange={(value) => handleChange("highPrice", value)}
             isInvalid={!!invalid.highPrice}
             isRequired
+            isDisabled={mode === "view"}
           />
           <Input
             label="저가"
@@ -255,6 +258,7 @@ export default function IndexDataModal({
             onChange={(value) => handleChange("lowPrice", value)}
             isInvalid={!!invalid.lowPrice}
             isRequired
+            isDisabled={mode === "view"}
           />
           <Input
             label="대비"
@@ -265,6 +269,7 @@ export default function IndexDataModal({
             onChange={(value) => handleChange("versus", value)}
             isInvalid={!!invalid.versus}
             isRequired
+            isDisabled={mode === "view"}
           />
           <Input
             label="등랄률 (%)"
@@ -275,6 +280,7 @@ export default function IndexDataModal({
             onChange={(value) => handleChange("fluctuationRate", value)}
             isInvalid={!!invalid.fluctuationRate}
             isRequired
+            isDisabled={mode === "view"}
           />
           <Input
             label="거래량"
@@ -285,6 +291,7 @@ export default function IndexDataModal({
             onChange={(value) => handleChange("tradingQuantity", value)}
             isInvalid={!!invalid.tradingQuantity}
             isRequired
+            isDisabled={mode === "view"}
           />
           <Input
             label="거래 대금"
@@ -295,6 +302,7 @@ export default function IndexDataModal({
             onChange={(value) => handleChange("tradingPrice", value)}
             isInvalid={!!invalid.tradingPrice}
             isRequired
+            isDisabled={mode === "view"}
           />
           <Input
             label="시가 총액"
@@ -306,26 +314,29 @@ export default function IndexDataModal({
             isInvalid={!!invalid.marketTotalAmount}
             isRequired
             className="col-span-2"
+            isDisabled={mode === "view"}
           />
         </div>
-        <div className="mt-6 flex gap-2">
-          <Button
-            color="secondary"
-            className="w-full"
-            onClick={onClose}
-            isDisabled={isPending}
-          >
-            취소
-          </Button>
-          <Button
-            type="submit"
-            color="primary"
-            className="w-full"
-            isDisabled={isPending || !canSubmit}
-          >
-            {mode === "edit" ? "수정하기" : "등록하기"}
-          </Button>
-        </div>
+        {mode !== "view" && (
+          <div className="mt-6 flex gap-2">
+            <Button
+              color="secondary"
+              className="w-full"
+              onClick={onClose}
+              isDisabled={isPending}
+            >
+              취소
+            </Button>
+            <Button
+              type="submit"
+              color="primary"
+              className="w-full"
+              isDisabled={isPending || !canSubmit}
+            >
+              {mode === "edit" ? "수정하기" : "등록하기"}
+            </Button>
+          </div>
+        )}
       </Form>
     </BaseModal>
   );
