@@ -6,17 +6,25 @@ import { Button } from "@/components/common/buttons/Button";
 import { Table } from "@/components/common/table/Table";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { IndexDataDto } from "@/model/indexData";
+import type { Index } from "@/pages/DataManagement";
 import { useIndexDataListStore } from "@/store/indexDataListStore";
 import { useModalStore } from "@/store/modalStore";
 import { useToastStore } from "@/store/toastStore";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 import { Empty } from "../common/Empty";
 
-export default function DataManagementTable() {
+interface DataManagementTableProps {
+  index: Index | null;
+}
+
+export default function DataManagementTable({
+  index,
+}: DataManagementTableProps) {
   const { items, isLoading, error, hasNext, filters, fetch, fetchNext } =
     useIndexDataListStore();
   const { successToast, errorToast } = useToastStore();
-  const { openConfirm, openIndexDataForm, close } = useModalStore();
+  const { openConfirm, openIndexDataForm, openIndexDataSync, close } =
+    useModalStore();
 
   // 테이블 정렬
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -76,6 +84,14 @@ export default function DataManagementTable() {
     openIndexDataForm({
       mode: "edit",
       initial: indexData,
+    });
+  };
+
+  // 지수 연동 클릭
+  const handleSyncApiClick = () => {
+    if (!index) return;
+    openIndexDataSync({
+      index: index,
     });
   };
 
@@ -204,7 +220,10 @@ export default function DataManagementTable() {
           <Empty
             message="등록된 데이터가 없습니다"
             button={
-              <Button iconLeading={<RefreshCcw05 size={20} />}>
+              <Button
+                iconLeading={<RefreshCcw05 size={20} />}
+                onClick={handleSyncApiClick}
+              >
                 Open API 연동
               </Button>
             }
