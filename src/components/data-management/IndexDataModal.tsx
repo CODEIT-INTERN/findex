@@ -12,7 +12,7 @@ import { DatePicker } from "../common/date-picker/DatePicker";
 import { Input } from "../common/input/Input";
 import { Label } from "../common/input/Label";
 import { BaseModal } from "../common/modals/BaseModal";
-import { Select } from "../common/select/Select";
+import { Select } from "../common/select/SelectTemp";
 
 interface IndexDataModalProps {
   isOpen: boolean;

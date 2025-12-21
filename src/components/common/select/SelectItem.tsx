@@ -7,8 +7,8 @@ import {
 import { Check } from "@untitledui/icons";
 import { cx } from "@/utils/cx";
 import { isReactComponent } from "@/utils/is-react-component";
-import type { SelectItemType } from "./Select";
-import { SelectContext } from "./Select";
+import type { SelectItemType } from "./SelectTemp";
+import { SelectContext } from "./SelectTemp";
 
 const sizes = {
   sm: "p-2 pr-2.5",
