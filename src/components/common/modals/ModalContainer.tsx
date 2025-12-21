@@ -1,11 +1,11 @@
 "use client";
 
+import IndexDataModal from "@/components/data-management/IndexDataModal";
+import IndexDataSyncModal from "@/components/data-management/IndexDataSyncModal";
 import { useModalStore } from "@/store/modalStore";
-import ConfirmModal from "./common/modals/ConfirmModal";
-import IndexDataModal from "./data-management/IndexDataModal";
-import IndexDataSyncModal from "./data-management/IndexDataSyncModal";
+import ConfirmModal from "./ConfirmModal";
 
-export function ModalHost() {
+export function ModalContainer() {
   const { modal, close } = useModalStore();
 
   if (!modal) return null;

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navigation from "@/components/layout/Navigation";
 import Header from "../common/Header";
-import { ModalHost } from "../ModalHost";
+import { ModalContainer } from "../common/modals/ModalContainer";
 
 export default function Layout() {
   return (
@@ -20,7 +20,7 @@ export default function Layout() {
       </div>
 
       {/* 전역 모달 */}
-      <ModalHost />
+      <ModalContainer />
     </div>
   );
 }
