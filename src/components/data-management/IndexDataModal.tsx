@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Form, type DateValue } from "react-aria-components";
 import { createIndexData, updateIndexData } from "@/api/indexDataApi";
 import type { IndexDataCreateRequest, IndexDataDto } from "@/model/indexData";
 import { useIndexDataListStore } from "@/store/indexDataListStore";
+import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
 import { useToastStore } from "@/store/toastStore";
 import { formatDateValue, parseDateValue } from "@/utils/date";
 import { isValidDecimal } from "@/utils/decimal";
@@ -11,6 +12,7 @@ import { DatePicker } from "../common/date-picker/DatePicker";
 import { Input } from "../common/input/Input";
 import { Label } from "../common/input/Label";
 import { BaseModal } from "../common/modals/BaseModal";
+import { Select } from "../common/select/Select";
 
 interface IndexDataModalProps {
   isOpen: boolean;
@@ -63,12 +65,23 @@ export default function IndexDataModal({
   const [isPending, setIsPending] = useState(false);
 
   const { successToast, errorToast } = useToastStore();
-  const { fetch } = useIndexDataListStore();
+  const { fetch: fetchIndexDataList } = useIndexDataListStore();
+  const { items } = useIndexInfoSummaryStore();
+
+  // 지수 정보 요약 목록
+  const summaries = useMemo(() => {
+    const mappedItems = items.map((item) => ({
+      id: item.id,
+      label: item.indexName,
+    }));
+
+    return [...mappedItems];
+  }, [items]);
 
   // 값 변경 핸들러
   const handleChange = (
     field: keyof IndexDataCreateRequest,
-    value: string | DateValue | null,
+    value: string | number | DateValue | null,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setInvalid((prev) => (prev[field] ? { ...prev, [field]: false } : prev));
@@ -137,7 +150,7 @@ export default function IndexDataModal({
       successToast(
         `성공적으로 ${mode === "create" ? "등록" : "수정"}되었습니다`,
       );
-      await fetch();
+      await fetchIndexDataList();
       onClose();
     } catch (error) {
       console.log(error);
@@ -147,12 +160,46 @@ export default function IndexDataModal({
     }
   };
 
-  console.log(formData);
-  console.log(invalid);
+  const canSubmit = useMemo(() => {
+    // create일 때만 indexInfoId 선택 필수
+    if (mode === "create") {
+      if (!formData.indexInfoId) return false;
+    }
+
+    // baseDate 필수
+    if (!formData.baseDate?.trim()) return false;
+
+    // 숫자 필드: 비어있으면 X, 형식 아니면 X
+    for (const field of numericFields) {
+      const raw = String(formData[field] ?? "").trim();
+      if (!raw) return false;
+    }
+
+    return true;
+  }, [formData, mode]);
 
   return (
     <BaseModal isOpen={isOpen} onOpenChange={onClose} title="데이터 등록">
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div className="space-y-2">
+          <Label aria-label="날짜" isRequired>
+            지수
+          </Label>
+          <Select
+            items={summaries}
+            aria-label="지수 선택"
+            placeholder="지수를 선택해주세요"
+            popoverClassName="scrollbar-thin"
+            value={formData.indexInfoId}
+            searchable
+            onChange={(key) => handleChange("indexInfoId", key as number)}
+            isDisabled={mode !== "create"}
+            className="w-full"
+          >
+            {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
+          </Select>
+        </div>
+
         <div className="space-y-2">
           <Label aria-label="날짜" isRequired>
             설립일
@@ -266,7 +313,7 @@ export default function IndexDataModal({
             color="secondary"
             className="w-full"
             onClick={onClose}
-            disabled={isPending}
+            isDisabled={isPending}
           >
             취소
           </Button>
@@ -274,7 +321,7 @@ export default function IndexDataModal({
             type="submit"
             color="primary"
             className="w-full"
-            disabled={isPending}
+            isDisabled={isPending || !canSubmit}
           >
             {mode === "edit" ? "수정하기" : "등록하기"}
           </Button>

@@ -12,7 +12,7 @@ import {
 } from "react-aria-components";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { useControlledState } from "@react-stately/utils";
-import { Calendar as CalendarIcon } from "@untitledui/icons";
+import { Calendar as CalendarIcon, ChevronDown } from "@untitledui/icons";
 import { Button } from "@/components/common/buttons/Button";
 import { cx } from "@/utils/cx";
 import { DateInput } from "./DateInput";
@@ -69,6 +69,8 @@ export const DateRangePicker = ({
           size="md"
           color="secondary"
           iconLeading={<CalendarIcon size={20} stroke="black" />}
+          iconTrailing={<ChevronDown />}
+          className="w-full justify-between"
         >
           {!value ? (
             <span className="text-placeholder">{placeholder}</span>

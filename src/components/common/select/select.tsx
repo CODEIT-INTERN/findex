@@ -149,7 +149,7 @@ const SelectValue = ({
               <ChevronDown
                 aria-hidden="true"
                 className={cx(
-                  "text-fg-quaternary ml-auto shrink-0",
+                  "ml-auto shrink-0",
                   size === "sm" ? "size-4 stroke-[2.5px]" : "size-5",
                 )}
               />

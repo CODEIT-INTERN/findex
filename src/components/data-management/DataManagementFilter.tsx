@@ -105,12 +105,13 @@ export default function DataManagementFilter({
             onChange={(value) => handleDateChange(value)}
             onApply={handleDateApply}
             onCancel={handleDateCancel}
+            className="w-66"
           />
         </>
       ) : (
         <>
           <div className="h-10 w-42 animate-pulse rounded-lg bg-gray-200" />
-          <div className="h-10 w-42 animate-pulse rounded-lg bg-gray-200" />
+          <div className="h-10 w-66 animate-pulse rounded-lg bg-gray-200" />
         </>
       )}
     </div>

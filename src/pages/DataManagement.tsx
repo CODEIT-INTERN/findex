@@ -10,7 +10,6 @@ export interface Index {
 
 export default function DataManagement() {
   const [selectedIndex, setSelectedIndex] = useState<Index | null>(null);
-  console.log("selectedIndex :", selectedIndex);
 
   const onIndexChange = (index: Index) => {
     setSelectedIndex(index);
