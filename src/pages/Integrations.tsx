@@ -1,10 +1,11 @@
 import { Toggle } from "@/components/common/toggle/toggle";
+import StatSection from "@/components/integrations/StatSection";
 
 export default function Integrations() {
   return (
     <div className="space-y-3">
-      Integrations
-      <Toggle label="remember me" size="md" />
+      {/* <Toggle label="remember me" size="md" /> */}
+      <StatSection />
     </div>
   );
 }
