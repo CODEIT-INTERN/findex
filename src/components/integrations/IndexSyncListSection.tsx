@@ -5,16 +5,14 @@ import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { AutoSyncConfigDto } from "@/model/sync";
 import { useAutoSyncConfigListStore } from "@/store/autoSyncConfigStore";
 import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
+import { Empty } from "../common/Empty";
 import { Select } from "../common/select/Select";
 import { Table } from "../common/table/Table";
 import { Toggle } from "../common/toggle/toggle";
 
 export const IndexSyncListSection = () => {
-  const {
-    items: indexInfoItems,
-    fetch: fetchInfoItems,
-    isLoading: isLoadingInfoItems,
-  } = useIndexInfoSummaryStore();
+  const { items: indexInfoItems, fetch: fetchInfoItems } =
+    useIndexInfoSummaryStore();
   const {
     items: indexItems,
     fetch: fetchIndexItems,
@@ -64,8 +62,7 @@ export const IndexSyncListSection = () => {
     const value = selectedItem?.value;
 
     if (value === "") {
-      const { enabled, ...rest } = filters;
-      setFilters(rest);
+      setFilters({ enabled: undefined });
     } else {
       setFilters({ enabled: value as boolean });
     }
@@ -160,6 +157,12 @@ export const IndexSyncListSection = () => {
         </Table>
 
         {hasNext && <div ref={loadMoreRef} className="h-4" />}
+
+        {!isLoadingIndexItems && indexItems.length === 0 && (
+          <div className="flex flex-1 flex-col items-center justify-center">
+            <Empty message="지수 정보가 없습니다" />
+          </div>
+        )}
       </div>
     </section>
   );

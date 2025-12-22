@@ -87,6 +87,11 @@ export const useAutoSyncConfigListStore = create<AutoSyncConfigListState>(
       set((state) => {
         const updatedFilters = { ...state.filters, ...newFilters };
 
+        // indexInfoId가 -1이면 제거
+        if (updatedFilters.indexInfoId === -1) {
+          delete updatedFilters.indexInfoId;
+        }
+
         return { filters: updatedFilters };
       });
     },

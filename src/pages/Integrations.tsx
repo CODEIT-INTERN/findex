@@ -1,5 +1,6 @@
 import { IndexSyncListSection } from "@/components/integrations/IndexSyncListSection";
 import { StatSection } from "@/components/integrations/StatSection";
+import { SyncHistorySection } from "@/components/integrations/SyncHistorySection";
 
 export default function Integrations() {
   return (
@@ -7,6 +8,7 @@ export default function Integrations() {
       <StatSection />
       <div className="flex min-h-80 flex-1 gap-5">
         <IndexSyncListSection />
+        <SyncHistorySection />
       </div>
     </div>
   );

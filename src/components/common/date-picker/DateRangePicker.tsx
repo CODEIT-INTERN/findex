@@ -70,7 +70,7 @@ export const DateRangePicker = ({
           color="secondary"
           iconLeading={<CalendarIcon size={20} stroke="black" />}
           iconTrailing={<ChevronDown />}
-          className="w-full justify-between"
+          className="h-10 w-full justify-between"
         >
           {!value ? (
             <span className="text-placeholder">{placeholder}</span>

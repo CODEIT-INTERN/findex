@@ -1,9 +1,5 @@
 import type { DateValue } from "react-aria-components";
-import {
-  CalendarDate,
-  getLocalTimeZone,
-  parseDate,
-} from "@internationalized/date";
+import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
 
 // TODO: 백엔드 요청 데이터 형식이랑 같은 지 확인해봐야 함
 // DateValue → YYYY-MM-DD 문자열 변환
@@ -17,6 +13,22 @@ export const formatDateValue = (dateValue: DateValue | null) => {
   const day = String(jsDate.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
+};
+
+// DateValue → YYYY-MM-DDTHH:MM:SS 문자열 변환
+export const formatSyncDateValue = (dateValue: DateValue | null) => {
+  if (!dateValue) return "";
+
+  const jsDate = dateValue.toDate(getLocalTimeZone());
+
+  const year = jsDate.getFullYear();
+  const month = String(jsDate.getMonth() + 1).padStart(2, "0");
+  const day = String(jsDate.getDate()).padStart(2, "0");
+  const hours = String(jsDate.getHours()).padStart(2, "0");
+  const minutes = String(jsDate.getMinutes()).padStart(2, "0");
+  const seconds = String(jsDate.getSeconds()).padStart(2, "0");
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 };
 
 export const formatDateThisMonth = (date: Date) => {

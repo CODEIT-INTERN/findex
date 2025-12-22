@@ -100,6 +100,11 @@ export const useSyncJobListStore = create<SyncJobListState>((set, get) => ({
     set((state) => {
       const updatedFilters = { ...state.filters, ...newFilters };
 
+      // indexInfoId가 -1이면 제거
+      if (updatedFilters.indexInfoId === -1) {
+        delete updatedFilters.indexInfoId;
+      }
+
       return { filters: updatedFilters };
     });
   },

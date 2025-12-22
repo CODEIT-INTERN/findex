@@ -20,3 +20,15 @@ export const IndexJobStatusOptions = [
   { id: 1, label: "활성화", value: true },
   { id: 2, label: "비활성화", value: false },
 ];
+
+export const IndexSyncStatusOptions = [
+  { id: 0, label: "전체 보기", value: "" },
+  { id: 1, label: "활성화", value: ResultType.SUCCESS },
+  { id: 2, label: "비활성화", value: ResultType.FAILED },
+];
+
+export const IndexJobTypeOptions = [
+  { id: 0, label: "전체 유형", value: "" },
+  { id: 1, label: "지수 정보", value: JobType.INDEX_INFO },
+  { id: 2, label: "지수 데이터", value: JobType.INDEX_DATA },
+];
