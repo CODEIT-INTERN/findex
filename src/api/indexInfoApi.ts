@@ -1,10 +1,9 @@
 import type {
-  CreateIndexInfoRequest,
   IndexInfoListParams,
+  IndexInfoRequest,
   IndexInfoResponse,
   IndexInfoSummary,
   SyncIndexResponse,
-  UpdateIndexInfoRequest,
 } from "@/model/indexInfo";
 import type { CursorPageResponse } from "@/model/pagination";
 import apiClient from "./client";
@@ -23,12 +22,12 @@ export const getIndexInfo = (id: number) => {
 };
 
 // 지수 정보 등록
-export const createIndexInfo = (data: CreateIndexInfoRequest) => {
+export const createIndexInfo = (data: IndexInfoRequest) => {
   return apiClient.post<IndexInfoResponse>("/index-infos", data);
 };
 
 // 지수 정보 수정
-export const updateIndexInfo = (id: number, data: UpdateIndexInfoRequest) => {
+export const updateIndexInfo = (id: number, data: IndexInfoRequest) => {
   return apiClient.patch<IndexInfoResponse>(`/index-infos/${id}`, data);
 };
 
