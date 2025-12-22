@@ -25,20 +25,12 @@ export interface IndexInfoResponse {
   favorite: boolean;
 }
 
-// 지수 정보 등록
-export interface CreateIndexInfoRequest {
-  indexClassification: string;
-  indexName: string;
+// 지수 정보 등록, 수정
+export interface IndexInfoRequest {
+  indexClassification?: string;
+  indexName?: string;
   employedItemsCount: number;
   // "YYYY-MM-DD"
-  basePointInTime: string;
-  baseIndex: number;
-  favorite: boolean;
-}
-
-// 지수 정보 수정
-export interface UpdateIndexInfoRequest {
-  employedItemsCount: number;
   basePointInTime: string;
   baseIndex: number;
   favorite: boolean;
