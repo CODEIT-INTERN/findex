@@ -1,39 +1,34 @@
 import { useEffect, useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { Edit01, RefreshCcw05, Star01, Trash01 } from "@untitledui/icons";
-import { deleteIndexInfo } from "@/api/indexInfoApi";
+import { deleteIndexInfo, syncIndexInfo } from "@/api/indexInfoApi";
 import { Button } from "@/components/common/buttons/Button";
 import { Empty } from "@/components/common/Empty";
-import ConfirmModal from "@/components/common/modals/ConfirmModal";
 import { Table } from "@/components/common/table/Table";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { IndexInfoResponse } from "@/model/indexInfo";
 import { useIndexIndexListStore } from "@/store/indexInfoListStore";
+import { useModalStore } from "@/store/modalStore";
 import { useToastStore } from "@/store/toastStore";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
-import UpdateIndexModal from "./UpdateIndexModal";
 
 const IndexTable = () => {
   const { items, isLoading, error, hasNext, filters, fetch, fetchNext } =
     useIndexIndexListStore();
-  // 테이블 정렬
+
+  // 모달 상태 및 액션
+  const { openConfirm, openIndexForm, openIndexSync, close } = useModalStore();
+  // 토스트
+  const { successToast, errorToast } = useToastStore();
+  // 정렬
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "indexClassification",
     direction: "descending",
   });
-  // 선택된 지수 id
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [selectedItem, setSelectedItem] = useState<IndexInfoResponse | null>(
-    null,
-  );
-  //   // 모달 상태들
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [isLinkModalOpen, setLinkModalOpen] = useState(false);
-  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
-  // 성공, 에러 토스트
-  const successToast = useToastStore((state) => state.successToast);
-  const errorToast = useToastStore((state) => state.errorToast);
-  // 무한 스크롤 유틸
+  const sortedItems = useMemo(() => {
+    return sortByDescriptor<IndexInfoResponse>(items, sortDescriptor);
+  }, [items, sortDescriptor]);
+  // 무한 스크롤
   const { loadMoreRef } = useInfiniteScroll({
     hasNext,
     isLoading,
@@ -41,46 +36,46 @@ const IndexTable = () => {
     rootMargin: "0px 0px 200px 0px",
   });
 
-  // 아이템 정렬
-  const sortedItems = useMemo(() => {
-    return sortByDescriptor<IndexInfoResponse>(items, sortDescriptor);
-  }, [items, sortDescriptor]);
-
   useEffect(() => {
     fetch();
   }, [fetch, filters]);
 
   const hasNoData = !isLoading && !error && sortedItems.length === 0;
 
-  // 삭제 버튼 클릭 핸들러
+  // 지수 삭제 클릭
   const onClickDelete = (id: number) => {
-    setSelectedId(id);
-    setDeleteModalOpen(true);
-  };
-  // 수정 버튼 클릭 핸들러
-  const onClickUpdate = (item: IndexInfoResponse) => {
-    setSelectedItem(item); // 📍 선택된 아이템 전체를 저장
-    setUpdateModalOpen(true);
+    openConfirm({
+      title: "지수 정보 삭제",
+      description: "정말로 이 지수 정보를 삭제하시겠습니까?",
+      variant: "danger",
+      onConfirm: () => handleDelete(id),
+    });
   };
 
-  // 삭제 API 호출 핸들러
-  const handleDelete = async () => {
-    if (selectedId === null) return;
-
+  // 지수 삭제 핸들러
+  const handleDelete = async (id: number) => {
     try {
-      await deleteIndexInfo(selectedId);
+      await deleteIndexInfo(id);
       fetch();
-      setDeleteModalOpen(false);
-      setSelectedId(null);
       successToast("성공적으로 삭제되었습니다.");
+      close(); // 📍 모달 닫기
     } catch (err) {
-      console.error("삭제 실패:", err);
-      errorToast("삭제 처리 중 오류가 발생했습니다.");
+      errorToast("삭제에 실패하였습니다.");
     }
   };
-  // 연동 핸들러
-  const handleLink = () => {
-    setLinkModalOpen(false);
+
+  // 지수 연동 버튼 클릭 핸들러
+  const handleSyncClick = async () => {
+    const result = await syncIndexInfo();
+    openIndexSync({
+      successCount: result.successCount,
+      failCount: result.failCount,
+    });
+  };
+
+  // 지수 수정 버튼 클릭
+  const onClickUpdate = (item: IndexInfoResponse) => {
+    openIndexForm({ mode: "edit", initial: item });
   };
 
   return (
@@ -93,7 +88,7 @@ const IndexTable = () => {
               <Button
                 iconLeading={<RefreshCcw05 size={20} stroke="white" />}
                 showTextWhileLoading
-                onClick={() => setLinkModalOpen(true)}
+                onClick={handleSyncClick}
               >
                 Open API 연동
               </Button>
@@ -203,47 +198,6 @@ const IndexTable = () => {
           </div>
         </div>
       )}
-
-      {/* -------------------------모달------------------------ */}
-      {/* 삭제 모달 */}
-      <ConfirmModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => {
-          setDeleteModalOpen(false);
-          setSelectedId(null);
-        }}
-        onConfirm={handleDelete}
-        title="지수 정보 삭제"
-      >
-        <p className="text-sm text-gray-500">
-          정말로 이 지수 정보를 삭제하시겠습니까?
-        </p>
-      </ConfirmModal>
-
-      {/* 수정 모달 */}
-      {isUpdateModalOpen && selectedItem && (
-        <UpdateIndexModal
-          isOpen={isUpdateModalOpen}
-          onOpenChange={(open) => {
-            setUpdateModalOpen(open);
-            if (!open) setSelectedItem(null);
-          }}
-          initialData={selectedItem}
-        />
-      )}
-
-      {/* 지수 연동 모달 */}
-      <ConfirmModal
-        isOpen={isLinkModalOpen}
-        onClose={() => setLinkModalOpen(false)}
-        onConfirm={handleLink}
-        title="지수 정보 연동"
-        variant="primary"
-      >
-        <p className="text-sm text-gray-500">
-          Open API를 통해 최신 지수 정보를 연동합니다.
-        </p>
-      </ConfirmModal>
     </div>
   );
 };
