@@ -21,19 +21,12 @@ export default function DataManagementFilter({
   const { setFilters } = useIndexDataListStore();
   const { items, fetch, isLoading } = useIndexInfoSummaryStore();
 
-  // TODO: 연동 관리 때 정리
   const summaries = useMemo(() => {
-    // const allOption = {
-    //   id: -1,
-    //   label: "전체 지수",
-    // };
-
     const mappedItems = items.map((item) => ({
       id: item.id,
       label: item.indexName,
     }));
 
-    // return [allOption, ...mappedItems];
     return [...mappedItems];
   }, [items]);
 

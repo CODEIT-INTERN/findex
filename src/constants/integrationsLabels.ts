@@ -14,3 +14,9 @@ export const ResultTypeLabels: Record<ResultTypeKey, string> = {
   [ResultType.SUCCESS]: "성공",
   [ResultType.FAILED]: "실패",
 };
+
+export const IndexJobStatusOptions = [
+  { id: 0, label: "전체 보기", value: "" },
+  { id: 1, label: "활성화", value: true },
+  { id: 2, label: "비활성화", value: false },
+];

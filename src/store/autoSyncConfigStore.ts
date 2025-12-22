@@ -16,12 +16,9 @@ interface AutoSyncConfigListState {
   fetchNext: () => Promise<void>;
   setFilters: (filters: Partial<AutoSyncConfigParams>) => void;
   resetFilters: () => void;
+  // 낙관적 상태 업데이트
+  updateItemEnabled: (id: number, enabled: boolean) => void;
 }
-
-const initialFilters: AutoSyncConfigParams = {
-  sortField: "indexInfo",
-  sortDirection: "desc",
-};
 
 export const useAutoSyncConfigListStore = create<AutoSyncConfigListState>(
   (set, get) => ({
@@ -32,7 +29,7 @@ export const useAutoSyncConfigListStore = create<AutoSyncConfigListState>(
     idAfter: 0,
     nextCursor: null,
     totalElements: 0,
-    filters: initialFilters,
+    filters: {},
 
     fetch: async (params) => {
       set({ isLoading: true, error: null });
@@ -96,8 +93,15 @@ export const useAutoSyncConfigListStore = create<AutoSyncConfigListState>(
 
     resetFilters: () => {
       set({
-        filters: initialFilters,
+        filters: {},
       });
     },
+
+    updateItemEnabled: (id: number, enabled: boolean) =>
+      set((state) => ({
+        items: state.items.map((item) =>
+          item.id === id ? { ...item, enabled } : item,
+        ),
+      })),
   }),
 );

@@ -48,7 +48,7 @@ export const StatCard = ({
 
   return (
     <div
-      className={`${styles.bg} ${styles.border} relative flex min-w-60 flex-col gap-3 rounded-2xl border p-6`}
+      className={`${styles.bg} ${styles.border} relative flex w-full min-w-60 flex-col gap-3 rounded-2xl border p-6`}
     >
       <div className="flex items-center justify-between">
         <h3 className="text-primary text-md font-semibold">{title}</h3>

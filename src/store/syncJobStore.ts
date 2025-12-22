@@ -1,11 +1,7 @@
 import { create } from "zustand";
 import { getSyncJobs } from "@/api/syncApi";
 import type { SyncJobDto, SyncJobParams } from "@/model/sync";
-import {
-  formatDate,
-  formatDateToYmdHms,
-  formatDateValueToIsoZ,
-} from "@/utils/date";
+import { formatDateToYmdHms } from "@/utils/date";
 
 interface SyncJobListState {
   items: SyncJobDto[];
@@ -115,7 +111,7 @@ export const useSyncJobListStore = create<SyncJobListState>((set, get) => ({
   },
 
   fetchStats: async () => {
-    set({ isLoading: true, error: null });
+    set({ isLoadingStats: true, error: null });
 
     try {
       const todayDate = new Date();

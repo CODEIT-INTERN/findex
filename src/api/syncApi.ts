@@ -17,3 +17,10 @@ export const getAutoSyncConfigs = (params?: AutoSyncConfigParams) => {
     params,
   );
 };
+
+export const patchAutoSyncConfigs = (
+  id: number,
+  data: { enabled: boolean },
+) => {
+  return apiClient.patch(`/auto-sync-configs/${id}`, data);
+};

@@ -11,23 +11,32 @@ export const StatSection = () => {
     fetchStats();
   }, [fetchStats]);
 
-  const { datePart, timePart } = formatDateSync(latestSync ?? "");
+  const { datePart, timePart } = latestSync
+    ? formatDateSync(latestSync)
+    : { datePart: "연동 없음", timePart: "-" };
+
+  const successValue = isLoadingStats
+    ? "--"
+    : totalSuccess.toLocaleString("ko-KR");
+  const failedValue = isLoadingStats
+    ? "--"
+    : totalFailed.toLocaleString("ko-KR");
 
   return (
-    <section className="grid grid-cols-3 gap-5 max-md:grid-cols-1">
+    <section className="scrollbar-thin flex shrink-0 gap-5 overflow-x-auto">
       <StatCard
         type="success"
         title="연동 성공"
         subtitle="최근 7일간"
         unit="건"
-        value={totalSuccess.toLocaleString("ko-KR")}
+        value={successValue}
       />
       <StatCard
         type="error"
         title="연동 실패"
         subtitle="최근 7일간"
         unit="건"
-        value={totalFailed.toLocaleString("ko-KR")}
+        value={failedValue}
       />
       <StatCard
         type="pending"

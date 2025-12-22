@@ -1,10 +1,13 @@
+import { IndexSyncListSection } from "@/components/integrations/IndexSyncListSection";
 import { StatSection } from "@/components/integrations/StatSection";
 
 export default function Integrations() {
   return (
-    <div className="space-y-3">
-      {/* <Toggle label="remember me" size="md" /> */}
+    <div className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-6 overflow-auto">
       <StatSection />
+      <div className="flex min-h-80 flex-1 gap-5">
+        <IndexSyncListSection />
+      </div>
     </div>
   );
 }
