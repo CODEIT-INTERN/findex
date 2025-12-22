@@ -11,6 +11,7 @@ import { useIndexDataListStore } from "@/store/indexDataListStore";
 import { useModalStore } from "@/store/modalStore";
 import { useToastStore } from "@/store/toastStore";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
+import { Badge } from "../common/badges/Badge";
 import { Empty } from "../common/Empty";
 
 interface DataManagementTableProps {
@@ -188,7 +189,9 @@ export default function DataManagementTable({
               </Table.Cell>
               <Table.Cell>{item.versus}</Table.Cell>
               <Table.Cell>{item.fluctuationRate}</Table.Cell>
-              <Table.Cell>{item.sourceType}</Table.Cell>
+              <Table.Cell>
+                <Badge kind="source" value={item.sourceType} />
+              </Table.Cell>
               <Table.Cell className="max-w-26">
                 <div className="inline-flex justify-end gap-0.5">
                   <Button

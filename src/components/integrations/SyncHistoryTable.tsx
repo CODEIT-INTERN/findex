@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { SyncJobDto } from "@/model/sync";
+import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
 import { useSyncJobListStore } from "@/store/syncJobStore";
 import { formatDateSync } from "@/utils/date";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
@@ -10,7 +11,14 @@ import { Empty } from "../common/Empty";
 import { Table } from "../common/table/Table";
 
 export const SyncHistoryTable = () => {
-  const { items, fetchNext, isLoading, hasNext, error } = useSyncJobListStore();
+  const {
+    items: histories,
+    fetchNext,
+    isLoading,
+    hasNext,
+    error,
+  } = useSyncJobListStore();
+  const { items: summaries } = useIndexInfoSummaryStore();
 
   // 테이블 정렬
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -28,8 +36,13 @@ export const SyncHistoryTable = () => {
 
   // 아이템 정렬
   const sortedItems = useMemo(() => {
-    return sortByDescriptor<SyncJobDto>(items, sortDescriptor);
-  }, [items, sortDescriptor]);
+    return sortByDescriptor<SyncJobDto>(histories, sortDescriptor);
+  }, [histories, sortDescriptor]);
+
+  const getIndexInfo = (indexInfoId: number) => {
+    const indexInfo = summaries.find((summary) => summary.id === indexInfoId);
+    return indexInfo;
+  };
 
   return (
     <div className="scrollbar-thin flex flex-1 flex-col overflow-auto">
@@ -74,9 +87,11 @@ export const SyncHistoryTable = () => {
                 </Table.Cell>
                 <Table.Cell>
                   <div>
-                    <p className="text-sm leading-5 font-medium">{item.id}</p>
+                    <p className="text-sm leading-5 font-medium">
+                      {getIndexInfo(item.indexInfoId)?.indexName}
+                    </p>
                     <p className="text-quaternary text-sm leading-5 font-normal">
-                      {item.id}
+                      {getIndexInfo(item.indexInfoId)?.indexClassification}
                     </p>
                   </div>
                 </Table.Cell>
@@ -99,7 +114,7 @@ export const SyncHistoryTable = () => {
         {isLoading && <span>불러오는 중...</span>}
       </div>
 
-      {!isLoading && items.length === 0 && (
+      {!isLoading && histories.length === 0 && (
         <div className="flex flex-1 flex-col items-center justify-center">
           <Empty message="연동 이력이 없습니다." />
         </div>
