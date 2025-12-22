@@ -1,12 +1,15 @@
 import type { ReactNode } from "react";
 import { create } from "zustand";
 import type { IndexDataDto } from "@/model/indexData";
+import type { IndexInfoResponse } from "@/model/indexInfo";
 import type { Index } from "@/pages/DataManagement";
 
 type ModalState =
   | { type: "confirm"; props: ConfirmProps }
   | { type: "indexDataForm"; props: IndexDataModalProps }
-  | { type: "indexDataSync"; props: IndexDataSyncModalProps };
+  | { type: "indexDataSync"; props: IndexDataSyncModalProps }
+  | { type: "indexForm"; props: IndexModalProps }
+  | { type: "indexSync"; props: IndexSyncModalProps };
 
 // Confirm
 interface ConfirmProps {
@@ -16,15 +19,27 @@ interface ConfirmProps {
   onConfirm: () => void | Promise<void>;
 }
 
-// IndexData
+// IndexData 지수데이터
 interface IndexDataModalProps {
   mode: "create" | "edit" | "view";
   initial?: Partial<IndexDataDto>;
 }
 
-// IndexDataSync
+// IndexDataSync 지수데이터 연동
 interface IndexDataSyncModalProps {
   index: Index;
+}
+
+// IndexInfo 지수정보
+interface IndexModalProps {
+  mode: "create" | "edit" | "view";
+  initial?: IndexInfoResponse;
+}
+
+// IndexSync 지수연동
+interface IndexSyncModalProps {
+  successCount?: number;
+  failCount?: number;
 }
 
 interface ModalStore {
@@ -35,6 +50,8 @@ interface ModalStore {
   openConfirm: (props: ConfirmProps) => void;
   openIndexDataForm: (props: IndexDataModalProps) => void;
   openIndexDataSync: (props: IndexDataSyncModalProps) => void;
+  openIndexForm: (props: IndexModalProps) => void;
+  openIndexSync: (props: IndexSyncModalProps) => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
@@ -47,4 +64,6 @@ export const useModalStore = create<ModalStore>((set) => ({
     set({ modal: { type: "indexDataForm", props } }),
   openIndexDataSync: (props) =>
     set({ modal: { type: "indexDataSync", props } }),
+  openIndexForm: (props) => set({ modal: { type: "indexForm", props } }),
+  openIndexSync: (props) => set({ modal: { type: "indexSync", props } }),
 }));
