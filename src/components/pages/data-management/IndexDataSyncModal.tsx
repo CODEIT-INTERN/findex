@@ -5,7 +5,6 @@ import type { IndexDataSyncRequest } from "@/model/indexData";
 import type { Index } from "@/pages/DataManagement";
 import { useIndexDataListStore } from "@/store/indexDataListStore";
 import { useToastStore } from "@/store/toastStore";
-import { cx } from "@/utils/cx";
 import { formatDateValue } from "@/utils/date";
 import { DateRangePicker } from "../../common/date-picker/DateRangePicker";
 import { Label } from "../../common/input/Label";

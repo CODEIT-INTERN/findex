@@ -2,7 +2,6 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
-  Label,
   Legend,
   ResponsiveContainer,
   XAxis,

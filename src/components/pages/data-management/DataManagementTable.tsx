@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { Edit01, RefreshCcw05, Trash01 } from "@untitledui/icons";
 import { deleteIndexData } from "@/api/indexDataApi";
