@@ -1,3 +1,13 @@
+import IndexChart from "@/components/pages/dashboard/IndexChart";
+import IndexPerformance from "@/components/pages/dashboard/IndexPerformance";
+import MajorIndex from "@/components/pages/dashboard/MajorIndex";
+
 export default function Dashboard() {
-  return <div className="space-y-6 p-6"></div>;
+  return (
+    <div className="scroll-hide h-full space-y-16 overflow-auto p-6">
+      <MajorIndex />
+      <IndexChart />
+      <IndexPerformance />
+    </div>
+  );
 }
