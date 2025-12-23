@@ -91,7 +91,7 @@ export const formatDateAsKorean = (dateString?: string | null): string => {
 
 // date -> YYYY-MM-DD HH:MM:SS
 export const formatDateToYmdHms = (date: Date): string => {
-  if (Number.isNaN(date.getTime)) {
+  if (Number.isNaN(date.getTime())) {
     return "";
   }
 

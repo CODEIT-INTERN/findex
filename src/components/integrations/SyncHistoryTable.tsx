@@ -59,7 +59,7 @@ export const SyncHistoryTable = () => {
             id="targetDate"
             label="대상 날짜"
             allowsSorting
-            isActive={isActiveSortColumn("closingPrice", sortDescriptor)}
+            isActive={isActiveSortColumn("targetDate", sortDescriptor)}
           />
           <Table.Head id="worker" label="작업자" />
           <Table.Head

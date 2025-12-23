@@ -147,10 +147,10 @@ export const useSyncJobListStore = create<SyncJobListState>((set, get) => ({
         isLoadingStats: false,
         totalSuccess: successRes.totalElements,
         totalFailed: failedRes.totalElements,
-        latestSync: successRes.content[0].jobTime,
+        latestSync: successRes.content[0].jobTime ?? null,
       });
     } catch (error) {
-      set({ error: error as Error, isLoading: false });
+      set({ error: error as Error, isLoadingStats: false });
     }
   },
 }));

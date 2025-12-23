@@ -73,6 +73,7 @@ export const IndexSyncListSection = () => {
     item: AutoSyncConfigDto,
     newEnabledValue: boolean,
   ) => {
+    const previousValue = item.enabled;
     updateItemEnabled(item.id, newEnabledValue);
 
     const body = {
@@ -84,6 +85,7 @@ export const IndexSyncListSection = () => {
       await fetchIndexItems();
     } catch (error) {
       console.log(error);
+      updateItemEnabled(item.id, previousValue);
     }
   };
 
