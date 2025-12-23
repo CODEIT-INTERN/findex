@@ -15,6 +15,22 @@ export const formatDateValue = (dateValue: DateValue | null) => {
   return `${year}-${month}-${day}`;
 };
 
+// DateValue → YYYY-MM-DDTHH:MM:SS 문자열 변환
+export const formatSyncDateValue = (dateValue: DateValue | null) => {
+  if (!dateValue) return "";
+
+  const jsDate = dateValue.toDate(getLocalTimeZone());
+
+  const year = jsDate.getFullYear();
+  const month = String(jsDate.getMonth() + 1).padStart(2, "0");
+  const day = String(jsDate.getDate()).padStart(2, "0");
+  const hours = String(jsDate.getHours()).padStart(2, "0");
+  const minutes = String(jsDate.getMinutes()).padStart(2, "0");
+  const seconds = String(jsDate.getSeconds()).padStart(2, "0");
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+};
+
 export const formatDateThisMonth = (date: Date) => {
   const yyyy = date.getFullYear();
   const mm = String(date.getMonth() + 1).padStart(2, "0");
@@ -73,10 +89,9 @@ export const formatDateAsKorean = (dateString?: string | null): string => {
   return `${yearNum}년 ${monthNum}월 ${dayNum}일`;
 };
 
-// isoString -> YYYY-MM-DD HH:MM:SS
-export const formatIsoToYmdHms = (isoString: string): string => {
-  const date = new Date(isoString);
-  if (Number.isNaN(date.getTime)) {
+// date -> YYYY-MM-DD HH:MM:SS
+export const formatDateToYmdHms = (date: Date): string => {
+  if (Number.isNaN(date.getTime())) {
     return "";
   }
 
@@ -89,7 +104,7 @@ export const formatIsoToYmdHms = (isoString: string): string => {
   const minutes = pad(date.getMinutes());
   const seconds = pad(date.getSeconds());
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 };
 
 // react-aria-components DateValue -> isoZ
@@ -149,4 +164,33 @@ export const formatToKNDate = (
   const day = String(date.getDate()).padStart(2, "0");
 
   return `${year}. ${month}. ${day}`;
+};
+
+// 날짜 객체를 YYYY-MM-DD로 반환
+export const formatDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
+export const formatDateSync = (dateString: string) => {
+  const date = new Date(dateString);
+
+  // 1. YYYY. MM. DD 형식 (마지막 마침표 제거)
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const datePart = `${year}. ${month}. ${day}`;
+
+  // 2. HH:MM 형식
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const timePart = `${hours}:${minutes}`;
+
+  return {
+    datePart: datePart,
+    timePart: timePart,
+  };
 };

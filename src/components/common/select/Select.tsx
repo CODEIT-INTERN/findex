@@ -19,6 +19,7 @@ import { SelectItem } from "./SelectItem";
 export type SelectItemType = {
   id: number;
   label?: string;
+  value?: string | boolean;
   avatarUrl?: string;
   isDisabled?: boolean;
   supportingText?: string;
