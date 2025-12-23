@@ -16,9 +16,10 @@ export default function DataManagementFilter({
 }: DataManagementFilterProps) {
   const [tempDateRange, setTempDateRange] = useState<DateRange | null>(null);
 
-  const { filters, setFilters } = useIndexDataListStore();
+  const { filters, setFilters, resetFilters } = useIndexDataListStore();
   const { items, fetch } = useIndexInfoSummaryStore();
 
+  // 지수 정보 요약 목록
   const summaries = useMemo(() => {
     const mappedItems = items.map((item) => ({
       id: item.id,
@@ -27,6 +28,8 @@ export default function DataManagementFilter({
 
     return [...mappedItems];
   }, [items]);
+
+  const currentIndexId = filters.indexInfoId ?? summaries[0]?.id;
 
   const handleDateChange = (value: DateRange | null) => {
     setTempDateRange(value);
@@ -61,10 +64,19 @@ export default function DataManagementFilter({
 
   // 지수 정보 요약 목록 조회
   useEffect(() => {
+    resetFilters();
     void fetch();
-  }, [fetch]);
+  }, []);
 
-  const currentIndexId = filters.indexInfoId ?? summaries[0]?.id;
+  // summaries가 준비되면 첫 번째 항목 선택
+  useEffect(() => {
+    if (summaries.length > 0 && summaries[0]) {
+      onIndexChange(summaries[0]);
+      setFilters({
+        indexInfoId: summaries[0].id,
+      });
+    }
+  }, [summaries, onIndexChange, setFilters]);
 
   return (
     <div className="flex gap-3 px-6 py-5">
