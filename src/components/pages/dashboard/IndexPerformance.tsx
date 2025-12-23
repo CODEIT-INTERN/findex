@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getIndexPerformanceRank } from "@/api/indexDataApi";
 import { Select } from "@/components/common/select/Select";
 import { Table } from "@/components/common/table/Table";
@@ -7,80 +7,107 @@ import {
   type DateUnitKey,
 } from "@/constants/dashboardOptions";
 import type { IndexPerformanceResponse } from "@/model/dashboard";
+import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
 import { IndexTrend } from "./IndexTrend";
 
 const IndexPerformance = () => {
-  const [selectedId, setSelectedId] = useState<number>(DateUnitOptions[0].id);
+  const [selectedUnitId, setSelectedUnitId] = useState<number>(
+    DateUnitOptions[2].id,
+  );
+  const [indexInfoId, setIndexInfoId] = useState<number | null>(null);
   const [rankData, setRankData] = useState<IndexPerformanceResponse[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<unknown>(null);
-  // 현재 선택된 ID에 해당하는 periodType (DAILY, WEEKLY 등)
+  const [isRankLoading, setIsRankLoading] = useState(false);
+
+  // 지수 목록 스토어 연동
+  const {
+    items,
+    fetch: fetchSummaries,
+    isLoading: isSummaryLoading,
+  } = useIndexInfoSummaryStore();
+
+  const summaries = useMemo(() => {
+    const allOption = { id: 0, label: "지수 전체" };
+    const mappedItems = items.map((item) => ({
+      id: item.id,
+      label: item.indexName,
+    }));
+    return [allOption, ...mappedItems];
+  }, [items]);
+
+  // 현재 선택된 ID에 해당하는 일/주/월간 조회 단위
   const currentPeriodType = (DateUnitOptions.find(
-    (opt) => opt.id === selectedId,
+    (opt) => opt.id === selectedUnitId,
   )?.value || "DAILY") as DateUnitKey;
 
-  // 지수 성과 로드
-  const fetchRankData = async (period: string) => {
-    setIsLoading(true);
+  // 데이터 로드 API
+  const fetchRankData = async (period: string, id: number | null) => {
+    setIsRankLoading(true);
     try {
       const response = await getIndexPerformanceRank({
-        periodType: period as any,
+        periodType: period as DateUnitKey,
+        indexInfoId: id ?? undefined,
         limit: 10,
       });
       setRankData(response);
     } catch (error) {
       console.error("랭킹 조회 실패:", error);
     } finally {
-      setIsLoading(false);
+      setIsRankLoading(true);
+      setIsRankLoading(false);
     }
   };
 
-  // 기간 변경 시 데이터 리로딩
+  // 지수 목록 최초 조회
   useEffect(() => {
-    fetchRankData(currentPeriodType);
-  }, [currentPeriodType]);
+    void fetchSummaries();
+  }, [fetchSummaries]);
 
-  const handleUnitChange = (id: number) => {
-    setSelectedId(id);
-  };
+  // 필터 변경이나 지수 ID 변경 시 리로딩
+  useEffect(() => {
+    fetchRankData(currentPeriodType, indexInfoId);
+  }, [currentPeriodType, indexInfoId]);
 
-  const hasNoData = !isLoading && !error && rankData.length === 0;
+  const handleUnitChange = (id: number) => setSelectedUnitId(id);
+  const handleIndexChange = (id: number) =>
+    setIndexInfoId(id === 0 ? null : id);
 
-  // 현재 선택된 id를 바탕으로 백엔드용 string key(value)를 찾음
-  // const selectedValue = DateUnitOptions.find((opt) => opt.id === selectedId)
-  //   ?.value as DateUnitKey;
+  const hasNoData = !isRankLoading && rankData.length === 0;
 
-  // const handleUnitChange = (id: number) => {
-  //   setSelectedId(id);
-  //   const apiValue = DateUnitOptions.find((opt) => opt.id === id)?.value;
-  //   console.log("백엔드로 보낼 키:", apiValue);
-  // };
   return (
-    <div className="flex flex-col rounded-xl bg-white shadow-xs">
+    <div className="border-secondary flex flex-col rounded-xl border bg-white shadow-xs">
       <div className="border-secondary flex w-full justify-between border-b px-6 py-5">
         <span className="text-lg font-semibold">지수 성과</span>
-        <Select
-          items={DateUnitOptions}
-          aria-label="지수 성과 조회 단위 선택"
-          defaultValue={DateUnitOptions[0].id}
-          onChange={(key) => handleUnitChange(Number(key))}
-          className="w-28"
-        >
-          {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
-        </Select>
-        {/* <Select
-            items={summaries}
-            aria-label="지수 선택"
-            popoverClassName="scrollbar-thin"
-            defaultValue={summaries[0].id}
-            searchable
-            onChange={(key) => handleIndexSelectChange(key as number)}
-            className="w-42"
+        <div className="flex gap-3">
+          <Select
+            items={DateUnitOptions}
+            aria-label="지수 성과 조회 단위 선택"
+            defaultValue={DateUnitOptions[0].id}
+            onChange={(key) => handleUnitChange(Number(key))}
+            className="w-28"
           >
             {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
-          </Select> */}
+          </Select>
+          {!isSummaryLoading && (
+            <Select
+              items={summaries}
+              aria-label="지수 선택"
+              popoverClassName="scrollbar-thin"
+              searchable
+              defaultValue={0}
+              placeholder="지수 전체"
+              onChange={(key) => handleIndexChange(Number(key))}
+              className="w-42"
+            >
+              {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
+            </Select>
+          )}
+        </div>
       </div>
-      {hasNoData ? (
+      {isRankLoading ? (
+        <div className="text-text-tertiary flex h-72 w-full items-center justify-center">
+          로딩 중...
+        </div>
+      ) : hasNoData ? (
         <p className="text-text-tertiary flex h-72 w-full items-center justify-center text-sm font-semibold">
           데이터가 없습니다.
         </p>
