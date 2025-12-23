@@ -33,7 +33,10 @@ export default function DataManagementHeader({
   };
 
   const handleSyncApiClick = () => {
-    if (!index) return;
+    if (!index) {
+      errorToast("연동할 지수를 선택해주세요.");
+      return;
+    }
     openIndexDataSync({
       index: index,
     });

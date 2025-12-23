@@ -146,7 +146,7 @@ export const SyncHistorySection = () => {
   }, [debouncedKeyword, setFilters]);
 
   return (
-    <section className="border-secondary flex flex-1 flex-col overflow-hidden rounded-xl border shadow-xs">
+    <section className="border-secondary flex min-w-2xl flex-1 flex-col overflow-hidden rounded-xl border bg-white shadow-xs">
       <div className="border-secondary flex justify-between gap-3 border-b px-6 py-5">
         <h2 className="shrink-0 text-lg leading-7 font-semibold">연동 이력</h2>
         <Input

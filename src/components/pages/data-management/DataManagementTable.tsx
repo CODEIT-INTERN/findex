@@ -13,6 +13,7 @@ import { useToastStore } from "@/store/toastStore";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 import { Badge } from "../../common/badges/Badge";
 import { Empty } from "../../common/Empty";
+import { IndexTrend } from "../dashboard/IndexTrend";
 
 interface DataManagementTableProps {
   index: Index | null;
@@ -21,7 +22,7 @@ interface DataManagementTableProps {
 export default function DataManagementTable({
   index,
 }: DataManagementTableProps) {
-  const { items, isLoading, error, hasNext, filters, fetch, fetchNext } =
+  const { items, isLoading, error, hasNext, fetch, fetchNext } =
     useIndexDataListStore();
   const { successToast, errorToast } = useToastStore();
   const { openConfirm, openIndexDataForm, openIndexDataSync, close } =
@@ -95,10 +96,6 @@ export default function DataManagementTable({
       index: index,
     });
   };
-
-  useEffect(() => {
-    void fetch();
-  }, [fetch, filters]);
 
   const hasNoData = !isLoading && !error && sortedItems.length === 0;
 
@@ -182,8 +179,12 @@ export default function DataManagementTable({
               <Table.Cell>
                 {item.tradingQuantity.toLocaleString("ko-KR")}
               </Table.Cell>
-              <Table.Cell>{item.versus.toLocaleString("ko-KR")}</Table.Cell>
-              <Table.Cell>{item.fluctuationRate}</Table.Cell>
+              <Table.Cell>
+                <IndexTrend diff={item.versus} />
+              </Table.Cell>
+              <Table.Cell>
+                <IndexTrend rate={item.fluctuationRate} />
+              </Table.Cell>
               <Table.Cell>
                 <Badge kind="source" value={item.sourceType} />
               </Table.Cell>
@@ -212,7 +213,6 @@ export default function DataManagementTable({
 
       <div className="flex flex-col items-center justify-center gap-1 py-2 text-center text-sm text-gray-600">
         {error && <span className="text-red-500">{error.message}</span>}
-        {isLoading && <span>불러오는 중...</span>}
       </div>
 
       {hasNoData && (

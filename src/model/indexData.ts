@@ -1,3 +1,5 @@
+import type { ResultType } from "@/types/enums";
+
 /**
  * 지수 데이터 DTO
  */
@@ -144,6 +146,19 @@ export interface IndexDataExportParams {
     | "tradingPrice"
     | "marketTotalAmount";
   sortDirection?: "asc" | "desc";
+}
+
+/**
+ * 지수 연동 DTO
+ */
+export interface IndexDataSyncDto {
+  id: number;
+  jobType: string;
+  indexInfoId: number;
+  targetDate: string;
+  worker: string;
+  jobTime: string;
+  result: ResultType;
 }
 
 /**

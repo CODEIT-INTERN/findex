@@ -179,7 +179,11 @@ export default function IndexDataModal({
   }, [formData, mode]);
 
   return (
-    <BaseModal isOpen={isOpen} onOpenChange={onClose} title="데이터 등록">
+    <BaseModal
+      isOpen={isOpen}
+      onOpenChange={onClose}
+      title={mode === "create" ? "데이터 등록" : "데이터 수정"}
+    >
       <Form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="space-y-2">
           <Label aria-label="지수" isRequired>

@@ -112,7 +112,7 @@ export const IndexSyncListSection = () => {
   }, []);
 
   return (
-    <section className="border-secondary flex w-87 flex-col overflow-hidden rounded-xl border shadow-xs">
+    <section className="border-secondary flex w-87 shrink-0 flex-col overflow-hidden rounded-xl border bg-white shadow-xs">
       <div className="border-secondary border-b px-6 py-5">
         <h2 className="text-lg leading-7 font-semibold">자동 연동 지수 목록</h2>
       </div>
@@ -139,7 +139,7 @@ export const IndexSyncListSection = () => {
           {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
         </Select>
       </div>
-      <div className="scrollbar-thin flex min-h-0 flex-1 flex-col overflow-y-auto">
+      <div className="scrollbar-thin flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
         <Table aria-label="자동 연동 지수 목록" selectionMode="none">
           <Table.Header>
             <Table.Head id="index" label="지수" isRowHeader />

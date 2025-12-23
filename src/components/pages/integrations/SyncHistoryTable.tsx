@@ -45,7 +45,7 @@ export const SyncHistoryTable = () => {
   };
 
   return (
-    <div className="scrollbar-thin flex flex-1 flex-col overflow-auto">
+    <div className="scrollbar-thin flex flex-1 flex-col overflow-auto bg-white">
       <Table
         aria-label="데이터 목록"
         sortDescriptor={sortDescriptor}

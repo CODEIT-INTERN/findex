@@ -16,18 +16,29 @@ export default function DataManagementFilter({
 }: DataManagementFilterProps) {
   const [tempDateRange, setTempDateRange] = useState<DateRange | null>(null);
 
-  const { filters, setFilters, resetFilters } = useIndexDataListStore();
-  const { items, fetch } = useIndexInfoSummaryStore();
+  const {
+    fetch: fetchIndexList,
+    filters,
+    setFilters,
+    resetFilters,
+  } = useIndexDataListStore();
+  const { items: indexInfoItems, fetch: fetchIndexSummaries } =
+    useIndexInfoSummaryStore();
 
   // 지수 정보 요약 목록
   const summaries = useMemo(() => {
-    const mappedItems = items.map((item) => ({
+    const allOption = {
+      id: -1,
+      label: "전체 지수",
+    };
+
+    const mappedItems = indexInfoItems.map((item) => ({
       id: item.id,
       label: item.indexName,
     }));
 
-    return [...mappedItems];
-  }, [items]);
+    return [allOption, ...mappedItems];
+  }, [indexInfoItems]);
 
   const currentIndexId = filters.indexInfoId ?? summaries[0]?.id;
 
@@ -62,21 +73,16 @@ export default function DataManagementFilter({
     setFilters({ indexInfoId: id });
   };
 
-  // 지수 정보 요약 목록 조회
   useEffect(() => {
+    fetchIndexSummaries();
     resetFilters();
-    void fetch();
+    fetchIndexList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // summaries가 준비되면 첫 번째 항목 선택
   useEffect(() => {
-    if (summaries.length > 0 && summaries[0]) {
-      onIndexChange(summaries[0]);
-      setFilters({
-        indexInfoId: summaries[0].id,
-      });
-    }
-  }, [summaries, onIndexChange, setFilters]);
+    fetchIndexList();
+  }, [filters]);
 
   return (
     <div className="flex gap-3 px-6 py-5">
