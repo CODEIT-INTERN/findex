@@ -66,7 +66,7 @@ export const IndexLineChart = ({ data }: IndexLineChartProps) => {
           <Legend
             align="center"
             verticalAlign="bottom"
-            layout={isDesktop ? "vertical" : "horizontal"}
+            layout="horizontal"
             content={<ChartLegendContent className="-translate-y-2" />}
             wrapperStyle={{
               paddingTop: "32px",
@@ -85,17 +85,7 @@ export const IndexLineChart = ({ data }: IndexLineChartProps) => {
               return parts.length >= 3 ? `${parts[1]}.${parts[2]}` : value;
             }}
             padding={{ left: 0, right: 0 }}
-          >
-            {isDesktop && (
-              <Label
-                fill="currentColor"
-                className="!text-xs font-medium max-lg:hidden"
-                position="bottom"
-              >
-                Month
-              </Label>
-            )}
-          </XAxis>
+          ></XAxis>
 
           <YAxis
             fill="currentColor"
