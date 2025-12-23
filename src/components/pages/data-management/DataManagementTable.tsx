@@ -11,8 +11,8 @@ import { useIndexDataListStore } from "@/store/indexDataListStore";
 import { useModalStore } from "@/store/modalStore";
 import { useToastStore } from "@/store/toastStore";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
-import { Badge } from "../common/badges/Badge";
-import { Empty } from "../common/Empty";
+import { Badge } from "../../common/badges/Badge";
+import { Empty } from "../../common/Empty";
 
 interface DataManagementTableProps {
   index: Index | null;
@@ -177,18 +177,18 @@ export default function DataManagementTable({
                 {item.marketPrice.toLocaleString("ko-KR")}
               </Table.Cell>
               <Table.Cell>{item.closingPrice}</Table.Cell>
-              <Table.Cell>{item.highPrice}</Table.Cell>
-              <Table.Cell>{item.lowPrice}</Table.Cell>
+              <Table.Cell>{item.highPrice.toLocaleString("ko-KR")}</Table.Cell>
+              <Table.Cell>{item.lowPrice.toLocaleString("ko-KR")}</Table.Cell>
               <Table.Cell>
                 {item.tradingQuantity.toLocaleString("ko-KR")}
               </Table.Cell>
-              <Table.Cell>{item.versus}</Table.Cell>
+              <Table.Cell>{item.versus.toLocaleString("ko-KR")}</Table.Cell>
               <Table.Cell>{item.fluctuationRate}</Table.Cell>
               <Table.Cell>
                 <Badge kind="source" value={item.sourceType} />
               </Table.Cell>
-              <Table.Cell className="max-w-26">
-                <div className="inline-flex justify-end gap-0.5">
+              <Table.Cell className="w-26">
+                <div className="inline-flex justify-end gap-2">
                   <Button
                     color="tertiary"
                     iconLeading={Trash01}

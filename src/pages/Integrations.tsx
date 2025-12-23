@@ -1,6 +1,6 @@
-import { IndexSyncListSection } from "@/components/integrations/IndexSyncListSection";
-import { StatSection } from "@/components/integrations/StatSection";
-import { SyncHistorySection } from "@/components/integrations/SyncHistorySection";
+import { IndexSyncListSection } from "@/components/pages/integrations/IndexSyncListSection";
+import { StatSection } from "@/components/pages/integrations/StatSection";
+import { SyncHistorySection } from "@/components/pages/integrations/SyncHistorySection";
 
 export default function Integrations() {
   return (

@@ -5,10 +5,10 @@ import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { AutoSyncConfigDto } from "@/model/sync";
 import { useAutoSyncConfigListStore } from "@/store/autoSyncConfigStore";
 import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
-import { Empty } from "../common/Empty";
-import { Select } from "../common/select/Select";
-import { Table } from "../common/table/Table";
-import { Toggle } from "../common/toggle/toggle";
+import { Empty } from "../../common/Empty";
+import { Select } from "../../common/select/Select";
+import { Table } from "../../common/table/Table";
+import { Toggle } from "../../common/toggle/toggle";
 
 export const IndexSyncListSection = () => {
   const { items: indexInfoItems, fetch: fetchInfoItems } =

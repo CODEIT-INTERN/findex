@@ -10,9 +10,9 @@ import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
 import { useSyncJobListStore } from "@/store/syncJobStore";
 import type { JobType, ResultType } from "@/types/enums";
 import { formatSyncDateValue } from "@/utils/date";
-import { DateRangePicker } from "../common/date-picker/DateRangePicker";
-import { Input } from "../common/input/Input";
-import { Select } from "../common/select/Select";
+import { DateRangePicker } from "../../common/date-picker/DateRangePicker";
+import { Input } from "../../common/input/Input";
+import { Select } from "../../common/select/Select";
 import { SyncHistoryTable } from "./SyncHistoryTable";
 
 export const SyncHistorySection = () => {
@@ -120,6 +120,21 @@ export const SyncHistorySection = () => {
     });
   }, [debouncedKeyword, setFilters]);
 
+  // Select의 현재 값
+  const currentJobTypeId =
+    filters.jobType === undefined
+      ? IndexJobTypeOptions[0].id
+      : (IndexJobTypeOptions.find((opt) => opt.value === filters.jobType)?.id ??
+        IndexJobTypeOptions[0].id);
+
+  const currentIndexId = filters.indexInfoId ?? -1;
+
+  const currentStatusId =
+    filters.status === undefined
+      ? IndexSyncStatusOptions[0].id
+      : (IndexSyncStatusOptions.find((opt) => opt.value === filters.status)
+          ?.id ?? IndexSyncStatusOptions[0].id);
+
   return (
     <section className="border-secondary flex flex-1 flex-col overflow-hidden rounded-xl border shadow-xs">
       <div className="border-secondary flex justify-between gap-3 border-b px-6 py-5">
@@ -137,7 +152,7 @@ export const SyncHistorySection = () => {
           <Select
             items={IndexJobTypeOptions}
             aria-label="지수 연동 상태 선택"
-            defaultValue={IndexJobTypeOptions[0].id}
+            value={currentJobTypeId}
             onChange={(key) => handleJobTypeChange(key as number)}
             className="w-30"
           >
@@ -147,7 +162,7 @@ export const SyncHistorySection = () => {
             items={summaries}
             aria-label="지수 선택"
             popoverClassName="scrollbar-thin"
-            defaultValue={summaries[0].id}
+            value={currentIndexId}
             searchable
             onChange={(key) => handleIndexSelectChange(key as number)}
             className="w-42"
@@ -169,7 +184,7 @@ export const SyncHistorySection = () => {
         <Select
           items={IndexSyncStatusOptions}
           aria-label="지수 연동 상태 선택"
-          defaultValue={IndexSyncStatusOptions[0].id}
+          value={currentStatusId}
           onChange={(key) => handleIndexStatusChange(key as number)}
           className="w-36"
         >

@@ -6,9 +6,9 @@ import type { Index } from "@/pages/DataManagement";
 import { useIndexDataListStore } from "@/store/indexDataListStore";
 import { useToastStore } from "@/store/toastStore";
 import { formatDateValue } from "@/utils/date";
-import { DateRangePicker } from "../common/date-picker/DateRangePicker";
-import { Label } from "../common/input/Label";
-import ConfirmModal from "../common/modals/ConfirmModal";
+import { DateRangePicker } from "../../common/date-picker/DateRangePicker";
+import { Label } from "../../common/input/Label";
+import ConfirmModal from "../../common/modals/ConfirmModal";
 
 interface IndexDataSyncModalProps {
   isOpen: boolean;

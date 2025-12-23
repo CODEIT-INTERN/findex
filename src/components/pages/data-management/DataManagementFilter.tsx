@@ -5,7 +5,7 @@ import type { Index } from "@/pages/DataManagement";
 import { useIndexDataListStore } from "@/store/indexDataListStore";
 import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
 import { formatDateRange } from "@/utils/date";
-import { Select } from "../common/select/Select";
+import { Select } from "../../common/select/Select";
 
 interface DataManagementFilterProps {
   onIndexChange: (index: Index) => void;
