@@ -1361,3 +1361,18 @@
     --outline-color-error_subtle: var(--color-border-error_subtle);
   }
 }
+
+/* 스크롤바를 완전히 숨기는 CSS */
+@layer utilities {
+  .scroll-hide {
+    /* IE and Edge */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+  }
+
+  /* Chrome, Safari, Opera */
+  .scroll-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
