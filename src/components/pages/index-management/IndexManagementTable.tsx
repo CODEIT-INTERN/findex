@@ -58,7 +58,7 @@ const IndexTable = () => {
       await deleteIndexInfo(id);
       fetch();
       successToast("성공적으로 삭제되었습니다.");
-      close(); // 📍 모달 닫기
+      close();
     } catch (err) {
       errorToast("삭제에 실패하였습니다.");
     }
