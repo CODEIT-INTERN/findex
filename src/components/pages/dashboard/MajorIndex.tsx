@@ -49,7 +49,7 @@ const MajorIndex = () => {
   };
 
   return (
-    <div className="flex flex-col rounded-xl bg-white shadow-xs">
+    <div className="border-secondary flex flex-col rounded-xl border bg-white shadow-xs">
       <div className="border-secondary flex w-full justify-between border-b px-6 py-5">
         <span className="text-lg font-semibold">주요 지수</span>
         <Select
