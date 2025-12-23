@@ -72,7 +72,7 @@ const MajorIndex = () => {
             <IndexCard key={indexData.indexInfoId} data={indexData} />
           ))
         ) : (
-          <div className="text-text-tertiary flex h-44 w-full flex-col items-center justify-center gap-4">
+          <div className="text-text-tertiary flex h-44 w-full flex-col items-center justify-center gap-4 text-sm">
             <p>지수를 즐겨찾기에 등록해주세요.</p>
             <Button
               iconTrailing={<ArrowRight size={20} stroke="#A4A7AE" />}
