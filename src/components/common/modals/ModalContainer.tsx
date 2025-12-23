@@ -1,7 +1,7 @@
 "use client";
 
-import IndexDataModal from "@/components/data-management/IndexDataModal";
-import IndexDataSyncModal from "@/components/data-management/IndexDataSyncModal";
+import IndexDataModal from "@/components/pages/data-management/IndexDataModal";
+import IndexDataSyncModal from "@/components/pages/data-management/IndexDataSyncModal";
 import IndexModal from "@/components/pages/index-management/IndexModal";
 import IndexSyncModal from "@/components/pages/index-management/IndexSyncModal";
 import { useModalStore } from "@/store/modalStore";

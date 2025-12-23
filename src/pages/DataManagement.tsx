@@ -1,7 +1,7 @@
 import { useState } from "react";
-import DataManagementFilter from "@/components/data-management/DataManagementFilter";
-import DataManagementHeader from "@/components/data-management/DataManagementHeader";
-import DataManagementTable from "@/components/data-management/DataManagementTable";
+import DataManagementFilter from "@/components/pages/data-management/DataManagementFilter";
+import DataManagementHeader from "@/components/pages/data-management/DataManagementHeader";
+import DataManagementTable from "@/components/pages/data-management/DataManagementTable";
 
 export interface Index {
   id: number;

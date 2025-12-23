@@ -5,10 +5,10 @@ import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { AutoSyncConfigDto } from "@/model/sync";
 import { useAutoSyncConfigListStore } from "@/store/autoSyncConfigStore";
 import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
-import { Empty } from "../common/Empty";
-import { Select } from "../common/select/Select";
-import { Table } from "../common/table/Table";
-import { Toggle } from "../common/toggle/toggle";
+import { Empty } from "../../common/Empty";
+import { Select } from "../../common/select/Select";
+import { Table } from "../../common/table/Table";
+import { Toggle } from "../../common/toggle/toggle";
 
 export const IndexSyncListSection = () => {
   const { items: indexInfoItems, fetch: fetchInfoItems } =
@@ -21,6 +21,7 @@ export const IndexSyncListSection = () => {
     hasNext,
     filters,
     setFilters,
+    resetFilters,
     updateItemEnabled,
   } = useAutoSyncConfigListStore();
 
@@ -37,6 +38,13 @@ export const IndexSyncListSection = () => {
 
     return [allOption, ...mappedItems];
   }, [indexInfoItems]);
+
+  const currentIndexId = filters.indexInfoId ?? -1;
+  const currentStatusId =
+    filters.enabled === undefined
+      ? 0
+      : (IndexJobStatusOptions.find((opt) => opt.value === filters.enabled)
+          ?.id ?? 0);
 
   // 무한 스크롤 유틸
   const { loadMoreRef } = useInfiniteScroll({
@@ -92,15 +100,19 @@ export const IndexSyncListSection = () => {
   // 지수 정보 요약 목록 조회
   useEffect(() => {
     void fetchInfoItems();
-  }, []);
+  }, [fetchInfoItems]);
 
   // 자동 연동 지수 목록 조회
   useEffect(() => {
     void fetchIndexItems();
-  }, [filters]);
+  }, [fetchIndexItems, filters]);
+
+  useEffect(() => {
+    resetFilters();
+  }, []);
 
   return (
-    <section className="border-secondary flex w-87 flex-col overflow-hidden rounded-xl border shadow-xs">
+    <section className="border-secondary flex w-87 shrink-0 flex-col overflow-hidden rounded-xl border bg-white shadow-xs">
       <div className="border-secondary border-b px-6 py-5">
         <h2 className="text-lg leading-7 font-semibold">자동 연동 지수 목록</h2>
       </div>
@@ -108,8 +120,9 @@ export const IndexSyncListSection = () => {
         <Select
           items={summaries}
           aria-label="지수 선택"
+          placeholder="지수 선택"
           popoverClassName="scrollbar-thin"
-          defaultValue={summaries[0].id}
+          value={currentIndexId}
           searchable
           onChange={(key) => handleIndexSelectChange(key as number)}
           className="w-36"
@@ -119,14 +132,14 @@ export const IndexSyncListSection = () => {
         <Select
           items={IndexJobStatusOptions}
           aria-label="지수 연동 상태 선택"
-          defaultValue={IndexJobStatusOptions[0].id}
+          value={currentStatusId}
           onChange={(key) => handleIndexStatusChange(key as number)}
           className="w-36"
         >
           {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
         </Select>
       </div>
-      <div className="scrollbar-thin flex min-h-0 flex-1 flex-col overflow-y-auto">
+      <div className="scrollbar-thin flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
         <Table aria-label="자동 연동 지수 목록" selectionMode="none">
           <Table.Header>
             <Table.Head id="index" label="지수" isRowHeader />

@@ -56,7 +56,7 @@ export const DatePicker = ({
           color="secondary"
           iconLeading={<CalendarIcon size={20} stroke="#535862" />}
           iconTrailing={<ChevronDown />}
-          className={`${!value ? "text-text-placeholder" : ""} text-md flex w-full justify-between font-normal`}
+          className={`${!value ? "text-text-placeholder" : ""} text-md disabled:bg-secondary flex w-full justify-between font-normal`}
         >
           {formattedDate}
         </Button>

@@ -18,7 +18,7 @@ const Header = () => {
   const IconComponent = currentMenu?.icon;
 
   return (
-    <header className="mt-10 flex items-center gap-3 pl-2">
+    <header className="mt-10 flex items-center gap-3 pl-5">
       {IconComponent && <IconComponent className="size-8" aria-hidden="true" />}
       <h1 className="text-display-xs font-bold">
         {currentMenu?.label || "Findex"}

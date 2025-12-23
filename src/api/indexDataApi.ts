@@ -4,6 +4,7 @@ import type {
   IndexDataDto,
   IndexDataExportParams,
   IndexDataListParams,
+  IndexDataSyncDto,
   IndexDataSyncRequest,
   IndexDataUpdateRequest,
   IndexPerformanceDto,
@@ -91,5 +92,5 @@ export const downloadIndexDataCSV = (params?: IndexDataExportParams) => {
  * 지수 데이터 연동
  */
 export const syncIndexData = (data: IndexDataSyncRequest) => {
-  return apiClient.post("/sync-jobs/index-data", data);
+  return apiClient.post<IndexDataSyncDto[]>("/sync-jobs/index-data", data);
 };

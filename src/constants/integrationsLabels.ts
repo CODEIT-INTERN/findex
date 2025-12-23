@@ -22,9 +22,9 @@ export const IndexJobStatusOptions = [
 ];
 
 export const IndexSyncStatusOptions = [
-  { id: 0, label: "전체 보기", value: "" },
-  { id: 1, label: "활성화", value: ResultType.SUCCESS },
-  { id: 2, label: "비활성화", value: ResultType.FAILED },
+  { id: 0, label: "전체 상태", value: "" },
+  { id: 1, label: "성공", value: ResultType.SUCCESS },
+  { id: 2, label: "실패", value: ResultType.FAILED },
 ];
 
 export const IndexJobTypeOptions = [

@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import type { DateRange } from "react-aria-components";
 import { SearchMd } from "@untitledui/icons";
+import { DateRangePicker } from "@/components/common/date-picker/DateRangePicker";
+import { Input } from "@/components/common/input/Input";
+import { Select } from "@/components/common/select/Select";
 import {
   IndexJobTypeOptions,
   IndexSyncStatusOptions,
@@ -10,9 +13,6 @@ import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
 import { useSyncJobListStore } from "@/store/syncJobStore";
 import type { JobType, ResultType } from "@/types/enums";
 import { formatSyncDateValue } from "@/utils/date";
-import { DateRangePicker } from "../common/date-picker/DateRangePicker";
-import { Input } from "../common/input/Input";
-import { Select } from "../common/select/Select";
 import { SyncHistoryTable } from "./SyncHistoryTable";
 
 export const SyncHistorySection = () => {
@@ -21,7 +21,12 @@ export const SyncHistorySection = () => {
 
   const { items: indexInfoItems, fetch: fetchInfoItems } =
     useIndexInfoSummaryStore();
-  const { filters, setFilters, fetch: fetchIndexItems } = useSyncJobListStore();
+  const {
+    filters,
+    setFilters,
+    fetch: fetchIndexItems,
+    resetFilters,
+  } = useSyncJobListStore();
 
   const debouncedKeyword = useDebouncedValue(keyword);
 
@@ -38,6 +43,21 @@ export const SyncHistorySection = () => {
 
     return [allOption, ...mappedItems];
   }, [indexInfoItems]);
+
+  // Select의 현재 값을 filters에서 계산
+  const currentJobTypeId =
+    filters.jobType === undefined
+      ? IndexJobTypeOptions[0].id
+      : (IndexJobTypeOptions.find((opt) => opt.value === filters.jobType)?.id ??
+        IndexJobTypeOptions[0].id);
+
+  const currentIndexId = filters.indexInfoId ?? -1;
+
+  const currentStatusId =
+    filters.status === undefined
+      ? IndexSyncStatusOptions[0].id
+      : (IndexSyncStatusOptions.find((opt) => opt.value === filters.status)
+          ?.id ?? IndexSyncStatusOptions[0].id);
 
   const handleKeywordChange = (value: string) => {
     setKeyword(value);
@@ -104,6 +124,11 @@ export const SyncHistorySection = () => {
     });
   };
 
+  // 컴포넌트 마운트 시 모든 상태 초기화
+  useEffect(() => {
+    resetFilters();
+  }, []);
+
   // 지수 정보 요약 목록 조회
   useEffect(() => {
     void fetchInfoItems();
@@ -121,12 +146,13 @@ export const SyncHistorySection = () => {
   }, [debouncedKeyword, setFilters]);
 
   return (
-    <section className="border-secondary flex flex-1 flex-col overflow-hidden rounded-xl border shadow-xs">
+    <section className="border-secondary flex min-w-2xl flex-1 flex-col overflow-hidden rounded-xl border bg-white shadow-xs">
       <div className="border-secondary flex justify-between gap-3 border-b px-6 py-5">
         <h2 className="shrink-0 text-lg leading-7 font-semibold">연동 이력</h2>
         <Input
           placeholder="작업자명"
           icon={SearchMd}
+          value={keyword}
           onChange={(value) => handleKeywordChange(value)}
           className="w-42"
         />
@@ -136,8 +162,8 @@ export const SyncHistorySection = () => {
         <div className="flex items-center gap-3">
           <Select
             items={IndexJobTypeOptions}
-            aria-label="지수 연동 상태 선택"
-            defaultValue={IndexJobTypeOptions[0].id}
+            aria-label="지수 연동 유형 선택"
+            value={currentJobTypeId}
             onChange={(key) => handleJobTypeChange(key as number)}
             className="w-30"
           >
@@ -147,9 +173,9 @@ export const SyncHistorySection = () => {
             items={summaries}
             aria-label="지수 선택"
             popoverClassName="scrollbar-thin"
-            defaultValue={summaries[0].id}
-            searchable
+            value={currentIndexId}
             onChange={(key) => handleIndexSelectChange(key as number)}
+            searchable
             className="w-42"
           >
             {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
@@ -169,7 +195,7 @@ export const SyncHistorySection = () => {
         <Select
           items={IndexSyncStatusOptions}
           aria-label="지수 연동 상태 선택"
-          defaultValue={IndexSyncStatusOptions[0].id}
+          value={currentStatusId}
           onChange={(key) => handleIndexStatusChange(key as number)}
           className="w-36"
         >

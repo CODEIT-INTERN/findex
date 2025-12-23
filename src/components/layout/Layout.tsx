@@ -5,7 +5,7 @@ import { ModalContainer } from "../common/modals/ModalContainer";
 
 export default function Layout() {
   return (
-    <div className="text-primary h-screen bg-slate-50">
+    <div className="text-primary scrollbar-thin h-screen bg-slate-50">
       <div className="mx-auto flex h-full min-h-0 max-w-350 flex-col">
         {/* 헤더바 */}
         <Navigation />

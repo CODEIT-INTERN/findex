@@ -7,12 +7,12 @@ import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
 import { useToastStore } from "@/store/toastStore";
 import { formatDateValue, parseDateValue } from "@/utils/date";
 import { isValidDecimal } from "@/utils/decimal";
-import { Button } from "../common/buttons/Button";
-import { DatePicker } from "../common/date-picker/DatePicker";
-import { Input } from "../common/input/Input";
-import { Label } from "../common/input/Label";
-import { BaseModal } from "../common/modals/BaseModal";
-import { Select } from "../common/select/Select";
+import { Button } from "../../common/buttons/Button";
+import { DatePicker } from "../../common/date-picker/DatePicker";
+import { Input } from "../../common/input/Input";
+import { Label } from "../../common/input/Label";
+import { BaseModal } from "../../common/modals/BaseModal";
+import { Select } from "../../common/select/Select";
 
 interface IndexDataModalProps {
   isOpen: boolean;
@@ -179,7 +179,11 @@ export default function IndexDataModal({
   }, [formData, mode]);
 
   return (
-    <BaseModal isOpen={isOpen} onOpenChange={onClose} title="데이터 등록">
+    <BaseModal
+      isOpen={isOpen}
+      onOpenChange={onClose}
+      title={mode === "create" ? "데이터 등록" : "데이터 수정"}
+    >
       <Form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="space-y-2">
           <Label aria-label="지수" isRequired>

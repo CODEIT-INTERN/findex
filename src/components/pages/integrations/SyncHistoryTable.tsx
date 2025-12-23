@@ -6,9 +6,9 @@ import { useIndexInfoSummaryStore } from "@/store/indexInfoSummaryStore";
 import { useSyncJobListStore } from "@/store/syncJobStore";
 import { formatDateSync } from "@/utils/date";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
-import { Badge } from "../common/badges/Badge";
-import { Empty } from "../common/Empty";
-import { Table } from "../common/table/Table";
+import { Badge } from "../../common/badges/Badge";
+import { Empty } from "../../common/Empty";
+import { Table } from "../../common/table/Table";
 
 export const SyncHistoryTable = () => {
   const {
@@ -45,7 +45,7 @@ export const SyncHistoryTable = () => {
   };
 
   return (
-    <div className="scrollbar-thin flex flex-1 flex-col overflow-auto">
+    <div className="scrollbar-thin flex flex-1 flex-col overflow-auto bg-white">
       <Table
         aria-label="데이터 목록"
         sortDescriptor={sortDescriptor}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { Edit01, RefreshCcw05, Trash01 } from "@untitledui/icons";
 import { deleteIndexData } from "@/api/indexDataApi";
@@ -11,8 +11,9 @@ import { useIndexDataListStore } from "@/store/indexDataListStore";
 import { useModalStore } from "@/store/modalStore";
 import { useToastStore } from "@/store/toastStore";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
-import { Badge } from "../common/badges/Badge";
-import { Empty } from "../common/Empty";
+import { Badge } from "../../common/badges/Badge";
+import { Empty } from "../../common/Empty";
+import { IndexTrend } from "../dashboard/IndexTrend";
 
 interface DataManagementTableProps {
   index: Index | null;
@@ -21,7 +22,7 @@ interface DataManagementTableProps {
 export default function DataManagementTable({
   index,
 }: DataManagementTableProps) {
-  const { items, isLoading, error, hasNext, filters, fetch, fetchNext } =
+  const { items, isLoading, error, hasNext, fetch, fetchNext } =
     useIndexDataListStore();
   const { successToast, errorToast } = useToastStore();
   const { openConfirm, openIndexDataForm, openIndexDataSync, close } =
@@ -96,10 +97,6 @@ export default function DataManagementTable({
     });
   };
 
-  useEffect(() => {
-    void fetch();
-  }, [fetch, filters]);
-
   const hasNoData = !isLoading && !error && sortedItems.length === 0;
 
   return (
@@ -160,12 +157,7 @@ export default function DataManagementTable({
             allowsSorting
             isActive={isActiveSortColumn("fluctuationRate", sortDescriptor)}
           />
-          <Table.Head
-            id="sourceType"
-            label="소스 타입"
-            allowsSorting
-            isActive={isActiveSortColumn("sourceType", sortDescriptor)}
-          />
+          <Table.Head id="sourceType" label="소스 타입" />
           <Table.Head id="actions" />
         </Table.Header>
 
@@ -182,18 +174,22 @@ export default function DataManagementTable({
                 {item.marketPrice.toLocaleString("ko-KR")}
               </Table.Cell>
               <Table.Cell>{item.closingPrice}</Table.Cell>
-              <Table.Cell>{item.highPrice}</Table.Cell>
-              <Table.Cell>{item.lowPrice}</Table.Cell>
+              <Table.Cell>{item.highPrice.toLocaleString("ko-KR")}</Table.Cell>
+              <Table.Cell>{item.lowPrice.toLocaleString("ko-KR")}</Table.Cell>
               <Table.Cell>
                 {item.tradingQuantity.toLocaleString("ko-KR")}
               </Table.Cell>
-              <Table.Cell>{item.versus}</Table.Cell>
-              <Table.Cell>{item.fluctuationRate}</Table.Cell>
+              <Table.Cell>
+                <IndexTrend diff={item.versus} />
+              </Table.Cell>
+              <Table.Cell>
+                <IndexTrend rate={item.fluctuationRate} />
+              </Table.Cell>
               <Table.Cell>
                 <Badge kind="source" value={item.sourceType} />
               </Table.Cell>
-              <Table.Cell className="max-w-26">
-                <div className="inline-flex justify-end gap-0.5">
+              <Table.Cell className="w-26">
+                <div className="inline-flex justify-end gap-2">
                   <Button
                     color="tertiary"
                     iconLeading={Trash01}
@@ -217,7 +213,6 @@ export default function DataManagementTable({
 
       <div className="flex flex-col items-center justify-center gap-1 py-2 text-center text-sm text-gray-600">
         {error && <span className="text-red-500">{error.message}</span>}
-        {isLoading && <span>불러오는 중...</span>}
       </div>
 
       {hasNoData && (
