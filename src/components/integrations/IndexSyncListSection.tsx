@@ -134,7 +134,7 @@ export const IndexSyncListSection = () => {
           </Table.Header>
           <Table.Body items={indexItems}>
             {(item) => (
-              <Table.Row>
+              <Table.Row id={item.id} key={item.id}>
                 <Table.Cell>
                   <div>
                     <p className="text-sm leading-5 font-medium">
