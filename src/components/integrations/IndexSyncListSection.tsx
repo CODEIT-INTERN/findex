@@ -92,12 +92,19 @@ export const IndexSyncListSection = () => {
   // 지수 정보 요약 목록 조회
   useEffect(() => {
     void fetchInfoItems();
-  }, []);
+  }, [fetchInfoItems]);
 
   // 자동 연동 지수 목록 조회
   useEffect(() => {
     void fetchIndexItems();
-  }, [filters]);
+  }, [fetchIndexItems, filters]);
+
+  const currentIndexId = filters.indexInfoId ?? -1;
+  const currentStatusId =
+    filters.enabled === undefined
+      ? 0
+      : (IndexJobStatusOptions.find((opt) => opt.value === filters.enabled)
+          ?.id ?? 0);
 
   return (
     <section className="border-secondary flex w-87 flex-col overflow-hidden rounded-xl border shadow-xs">
@@ -109,7 +116,7 @@ export const IndexSyncListSection = () => {
           items={summaries}
           aria-label="지수 선택"
           popoverClassName="scrollbar-thin"
-          defaultValue={summaries[0].id}
+          value={currentIndexId}
           searchable
           onChange={(key) => handleIndexSelectChange(key as number)}
           className="w-36"
@@ -119,7 +126,7 @@ export const IndexSyncListSection = () => {
         <Select
           items={IndexJobStatusOptions}
           aria-label="지수 연동 상태 선택"
-          defaultValue={IndexJobStatusOptions[0].id}
+          value={currentStatusId}
           onChange={(key) => handleIndexStatusChange(key as number)}
           className="w-36"
         >

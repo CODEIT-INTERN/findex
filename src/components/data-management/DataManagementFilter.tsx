@@ -98,7 +98,7 @@ export default function DataManagementFilter({
             onChange={(value) => handleDateChange(value)}
             onApply={handleDateApply}
             onCancel={handleDateCancel}
-            className="w-66"
+            className="min-w-66"
           />
         </>
       ) : (

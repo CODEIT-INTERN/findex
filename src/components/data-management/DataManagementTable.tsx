@@ -160,12 +160,7 @@ export default function DataManagementTable({
             allowsSorting
             isActive={isActiveSortColumn("fluctuationRate", sortDescriptor)}
           />
-          <Table.Head
-            id="sourceType"
-            label="소스 타입"
-            allowsSorting
-            isActive={isActiveSortColumn("sourceType", sortDescriptor)}
-          />
+          <Table.Head id="sourceType" label="소스 타입" />
           <Table.Head id="actions" />
         </Table.Header>
 
