@@ -16,7 +16,7 @@ const sizes = {
 };
 
 interface SelectItemProps
-  extends Omit<AriaListBoxItemProps<SelectItemType>, "id">, SelectItemType {}
+  extends Omit<AriaListBoxItemProps<object>, "id" | "value">, SelectItemType {}
 
 export const SelectItem = ({
   label,
@@ -39,17 +39,20 @@ export const SelectItem = ({
     : labelOrChildren;
 
   return (
-    <AriaListBoxItem
+    <AriaListBoxItem<object>
       id={id}
       value={
-        value ?? {
-          id,
-          label: labelOrChildren,
-          avatarUrl,
-          supportingText,
-          isDisabled,
-          icon: Icon,
-        }
+        value && typeof value === "object"
+          ? value
+          : {
+              id,
+              label: labelOrChildren,
+              avatarUrl,
+              supportingText,
+              isDisabled,
+              icon: Icon,
+              rawValue: value,
+            }
       }
       textValue={textValue}
       isDisabled={isDisabled}
