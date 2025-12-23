@@ -21,6 +21,7 @@ export const IndexSyncListSection = () => {
     hasNext,
     filters,
     setFilters,
+    resetFilters,
     updateItemEnabled,
   } = useAutoSyncConfigListStore();
 
@@ -37,6 +38,13 @@ export const IndexSyncListSection = () => {
 
     return [allOption, ...mappedItems];
   }, [indexInfoItems]);
+
+  const currentIndexId = filters.indexInfoId ?? -1;
+  const currentStatusId =
+    filters.enabled === undefined
+      ? 0
+      : (IndexJobStatusOptions.find((opt) => opt.value === filters.enabled)
+          ?.id ?? 0);
 
   // 무한 스크롤 유틸
   const { loadMoreRef } = useInfiniteScroll({
@@ -99,12 +107,9 @@ export const IndexSyncListSection = () => {
     void fetchIndexItems();
   }, [fetchIndexItems, filters]);
 
-  const currentIndexId = filters.indexInfoId ?? -1;
-  const currentStatusId =
-    filters.enabled === undefined
-      ? 0
-      : (IndexJobStatusOptions.find((opt) => opt.value === filters.enabled)
-          ?.id ?? 0);
+  useEffect(() => {
+    resetFilters();
+  }, []);
 
   return (
     <section className="border-secondary flex w-87 flex-col overflow-hidden rounded-xl border shadow-xs">
@@ -115,6 +120,7 @@ export const IndexSyncListSection = () => {
         <Select
           items={summaries}
           aria-label="지수 선택"
+          placeholder="지수 선택"
           popoverClassName="scrollbar-thin"
           value={currentIndexId}
           searchable

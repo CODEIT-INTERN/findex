@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { DateRange } from "react-aria-components";
 import { DateRangePicker } from "@/components/common/date-picker/DateRangePicker";
 import type { Index } from "@/pages/DataManagement";
@@ -16,10 +16,8 @@ export default function DataManagementFilter({
 }: DataManagementFilterProps) {
   const [tempDateRange, setTempDateRange] = useState<DateRange | null>(null);
 
-  const isInitializedRef = useRef(false);
-
-  const { setFilters } = useIndexDataListStore();
-  const { items, fetch, isLoading } = useIndexInfoSummaryStore();
+  const { filters, setFilters } = useIndexDataListStore();
+  const { items, fetch } = useIndexInfoSummaryStore();
 
   const summaries = useMemo(() => {
     const mappedItems = items.map((item) => ({
@@ -66,47 +64,32 @@ export default function DataManagementFilter({
     void fetch();
   }, [fetch]);
 
-  // 초기 로딩 완료 시 첫 번째 아이템 자동 선택 (한 번만)
-  useEffect(() => {
-    if (!isLoading && summaries.length > 0 && !isInitializedRef.current) {
-      onIndexChange(summaries[0]);
-      setFilters({ indexInfoId: summaries[0].id });
-      isInitializedRef.current = true;
-    }
-  }, [isLoading, summaries, onIndexChange, setFilters]);
+  const currentIndexId = filters.indexInfoId ?? summaries[0]?.id;
 
   return (
     <div className="flex gap-3 px-6 py-5">
-      {!isLoading && summaries.length > 0 ? (
-        <>
-          <Select
-            items={summaries}
-            aria-label="지수 선택"
-            popoverClassName="scrollbar-thin"
-            defaultValue={summaries[0].id}
-            searchable
-            onChange={(key) => handleSelectChange(key as number)}
-            className="w-42"
-          >
-            {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
-          </Select>
+      <Select
+        items={summaries}
+        aria-label="지수 선택"
+        placeholder="지수 선택"
+        popoverClassName="scrollbar-thin"
+        value={currentIndexId}
+        searchable
+        onChange={(key) => handleSelectChange(key as number)}
+        className="w-42"
+      >
+        {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
+      </Select>
 
-          <DateRangePicker
-            aria-label="날짜 선택"
-            placeholder="날짜를 선택해주세요"
-            value={tempDateRange}
-            onChange={(value) => handleDateChange(value)}
-            onApply={handleDateApply}
-            onCancel={handleDateCancel}
-            className="min-w-66"
-          />
-        </>
-      ) : (
-        <>
-          <div className="h-10 w-42 animate-pulse rounded-lg bg-gray-200" />
-          <div className="h-10 w-66 animate-pulse rounded-lg bg-gray-200" />
-        </>
-      )}
+      <DateRangePicker
+        aria-label="날짜 선택"
+        placeholder="날짜를 선택해주세요"
+        value={tempDateRange}
+        onChange={(value) => handleDateChange(value)}
+        onApply={handleDateApply}
+        onCancel={handleDateCancel}
+        className="min-w-66"
+      />
     </div>
   );
 }
