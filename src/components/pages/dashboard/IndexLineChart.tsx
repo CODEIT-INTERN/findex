@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   Area,
   AreaChart,
@@ -20,19 +21,25 @@ export const IndexLineChart = ({ data }: IndexLineChartProps) => {
   const isDesktop = useBreakpoint("lg");
 
   // 최신순으로 오는 데이터를 시간 순서(과거 -> 현재)로 뒤집고 하나로 합침
-  const combinedData = [...data.dataPoints].reverse().map((point) => {
-    const ma5Point = data.ma5DataPoints?.find((m) => m.date === point.date);
-    const ma20Point = data.ma20DataPoints?.find((m) => m.date === point.date);
+  const combinedData = useMemo(() => {
+    const points = data?.dataPoints || [];
 
-    return {
-      date: point.date,
-      close: point.value,
-      ma5: ma5Point?.value,
-      ma20: ma20Point?.value,
-    };
-  });
+    return [...points].reverse().map((point) => {
+      const ma5Point = data?.ma5DataPoints?.find((m) => m.date === point.date);
+      const ma20Point = data?.ma20DataPoints?.find(
+        (m) => m.date === point.date,
+      );
 
-  if (!combinedData.length) {
+      return {
+        date: point.date,
+        close: point.value,
+        ma5: ma5Point?.value,
+        ma20: ma20Point?.value,
+      };
+    });
+  }, [data]);
+
+  if (!combinedData?.length) {
     return (
       <div className="text-tertiary flex h-72 items-center justify-center">
         데이터가 없습니다.

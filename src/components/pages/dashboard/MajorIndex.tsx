@@ -67,8 +67,8 @@ const MajorIndex = () => {
           <div className="text-text-tertiary flex h-44 w-full items-center justify-center">
             데이터를 불러오는 중입니다...
           </div>
-        ) : summaries.length > 0 ? (
-          summaries.map((indexData) => (
+        ) : (summaries || []).length > 0 ? (
+          (summaries || []).map((indexData) => (
             <IndexCard key={indexData.indexInfoId} data={indexData} />
           ))
         ) : (

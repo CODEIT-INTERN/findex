@@ -27,10 +27,13 @@ const IndexPerformance = () => {
 
   const summaries = useMemo(() => {
     const allOption = { id: 0, label: "지수 전체" };
-    const mappedItems = items.map((item) => ({
+    const safeItems = items || [];
+
+    const mappedItems = safeItems.map((item) => ({
       id: item.id,
       label: item.indexName,
     }));
+
     return [allOption, ...mappedItems];
   }, [items]);
 
