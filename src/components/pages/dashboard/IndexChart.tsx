@@ -26,8 +26,11 @@ const IndexChart = ({ onIndexChange }: IndexChartProps) => {
   const [indexInfoId, setIndexInfoId] = useState<number | null>(null);
 
   const summaries = useMemo(() => {
-    const safeItems = items || [];
-    return safeItems.map((item) => ({
+    if (!items || !Array.isArray(items)) {
+      return [];
+    }
+
+    return items.map((item) => ({
       id: item.id,
       label: item.indexName,
     }));
