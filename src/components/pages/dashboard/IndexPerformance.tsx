@@ -27,13 +27,13 @@ const IndexPerformance = () => {
 
   const summaries = useMemo(() => {
     const allOption = { id: 0, label: "지수 전체" };
-    const safeItems = items || [];
 
-    const mappedItems = safeItems.map((item) => ({
+    if (!Array.isArray(items)) return [allOption];
+
+    const mappedItems = items.map((item) => ({
       id: item.id,
       label: item.indexName,
     }));
-
     return [allOption, ...mappedItems];
   }, [items]);
 
@@ -51,12 +51,12 @@ const IndexPerformance = () => {
         indexInfoId: id ?? undefined,
         limit: 10,
       });
-      setRankData(Array.isArray(response) ? response : []);
+      const data = Array.isArray(response) ? response : [];
+      setRankData(data);
     } catch (error) {
       console.error("랭킹 조회 실패:", error);
       setRankData([]);
     } finally {
-      setIsRankLoading(true);
       setIsRankLoading(false);
     }
   };

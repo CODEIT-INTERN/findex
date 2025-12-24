@@ -18,6 +18,13 @@ const IndexChart = ({ onIndexChange }: IndexChartProps) => {
     fetch: fetchSummaries,
     isLoading: isSummaryLoading,
   } = useIndexInfoSummaryStore();
+  // log
+  useEffect(() => {
+    console.log("DEBUG: 스토어에서 가져온 items 상태 ->", items);
+    console.log("DEBUG: items의 타입 ->", typeof items);
+    console.log("DEBUG: items가 배열인가? ->", Array.isArray(items));
+  }, [items]);
+
   const [selectedPeriodId, setSelectedPeriodId] = useState<number>(
     PeriodOptions[0].id,
   );
