@@ -185,7 +185,13 @@ const Select = ({
 
   // 검색어로 items 필터링
   const filteredItems = useMemo(() => {
-    if (!searchable || !searchQuery.trim() || !items) {
+    // items가 없으면 즉시 빈 배열 반환
+    if (!items || !Array.isArray(items)) {
+      return [];
+    }
+
+    // 검색어가 없으면 원본 items 반환
+    if (!searchable || !searchQuery.trim()) {
       return items;
     }
 
