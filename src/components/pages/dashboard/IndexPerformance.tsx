@@ -48,9 +48,10 @@ const IndexPerformance = () => {
         indexInfoId: id ?? undefined,
         limit: 10,
       });
-      setRankData(response);
+      setRankData(Array.isArray(response) ? response : []);
     } catch (error) {
       console.error("랭킹 조회 실패:", error);
+      setRankData([]);
     } finally {
       setIsRankLoading(true);
       setIsRankLoading(false);
@@ -115,14 +116,14 @@ const IndexPerformance = () => {
         <Table aria-label="데이터 목록">
           <Table.Header>
             <Table.Head id="rank" label="순위" />
-            <Table.Head id="indexName" label="지수" />
+            <Table.Head id="indexName" label="지수" isRowHeader />
             <Table.Head id="versus" label="대비" />
             <Table.Head id="fluctuationRate" label="등락률" />
             <Table.Head id="currentPrice" label="현재" />
             <Table.Head id="beforePrice" label="이전" />
           </Table.Header>
 
-          <Table.Body items={rankData}>
+          <Table.Body items={rankData || []}>
             {(item) => (
               <Table.Row
                 id={item.performance.indexInfoId}

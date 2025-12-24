@@ -124,7 +124,9 @@ const IndexChart = ({ onIndexChange }: IndexChartProps) => {
       </div>
       <div className="p-6">
         {isChartLoading || isSummaryLoading ? (
-          <div className="text-text-tertiary">데이터 로딩 중...</div>
+          <p className="text-text-tertiary flex h-44 w-full items-center justify-center">
+            데이터를 불러오는 중입니다...
+          </p>
         ) : chartData &&
           chartData.dataPoints &&
           chartData.dataPoints.length > 0 ? (
