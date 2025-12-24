@@ -20,11 +20,11 @@ export const useIndexInfoSummaryStore = create<IndexInfoSummaryState>(
       try {
         const data = await getIndexInfoSummaries();
         set({
-          items: data,
+          items: Array.isArray(data) ? data : [],
           isLoading: false,
         });
       } catch (error) {
-        set({ error: error as Error, isLoading: false });
+        set({ error: error as Error, isLoading: false, items: [] });
       }
     },
   }),
