@@ -22,6 +22,8 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
   const { fetch } = useIndexIndexListStore();
   // 성공, 에러 토스트
   const { successToast, errorToast } = useToastStore();
+  // 로딩 상태
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   // 상세, 수정, 생성 모드
   const isView = mode === "view";
   const isEdit = mode === "edit";
@@ -32,8 +34,8 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
       indexClassification: initial?.indexClassification || "",
       indexName: initial?.indexName || "",
       basePointInTime: parseDateValue(initial?.basePointInTime) || null,
-      employedItemsCount: initial?.employedItemsCount ?? 0,
-      baseIndex: initial?.baseIndex ?? 0,
+      employedItemsCount: initial?.employedItemsCount ?? "0",
+      baseIndex: initial?.baseIndex ?? "0",
       favorite: initial?.favorite ?? true,
     };
   });
@@ -58,7 +60,7 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
       onClose();
       return;
     }
-
+    setIsSubmitLoading(true);
     try {
       const payload: IndexInfoRequest = {
         indexClassification: formData.indexClassification,
@@ -81,6 +83,8 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
       onClose();
     } catch (err) {
       errorToast(isEdit ? "수정에 실패했습니다." : "등록에 실패하였습니다.");
+    } finally {
+      setIsSubmitLoading(false);
     }
   };
 
@@ -108,14 +112,21 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
         footer={
           <div className="flex w-full justify-between gap-3">
             {!isView && (
-              <Button color="secondary" onClick={onClose} className="w-full">
+              <Button
+                color="secondary"
+                onClick={onClose}
+                className="w-full"
+                isDisabled={isSubmitLoading}
+              >
                 취소
               </Button>
             )}
             <Button
               onClick={handleSubmit}
               className="w-full"
-              isDisabled={!isView && !isFormValid}
+              isDisabled={(!isView && !isFormValid) || isSubmitLoading}
+              isLoading={isSubmitLoading}
+              showTextWhileLoading
             >
               {isView || isEdit ? "수정" : "등록"}
             </Button>

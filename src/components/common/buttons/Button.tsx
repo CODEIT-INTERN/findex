@@ -197,56 +197,54 @@ export const Button = ({
         className,
       )}
     >
-      <div className="flex items-center justify-start gap-2">
-        {/* Leading icon */}
-        {isValidElement(IconLeading) && IconLeading}
-        {isReactComponent(IconLeading) && (
-          <IconLeading data-icon="leading" className={styles.common.icon} />
-        )}
+      {/* Leading icon */}
+      {isValidElement(IconLeading) && IconLeading}
+      {isReactComponent(IconLeading) && (
+        <IconLeading data-icon="leading" className={styles.common.icon} />
+      )}
 
-        {loading && (
-          <svg
+      {loading && (
+        <svg
+          fill="none"
+          data-icon="loading"
+          viewBox="0 0 20 20"
+          className={cx(
+            styles.common.icon,
+            !showTextWhileLoading &&
+              "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+          )}
+        >
+          {/* Background circle */}
+          <circle
+            className="stroke-current opacity-30"
+            cx="10"
+            cy="10"
+            r="8"
             fill="none"
-            data-icon="loading"
-            viewBox="0 0 20 20"
-            className={cx(
-              styles.common.icon,
-              !showTextWhileLoading &&
-                "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-            )}
-          >
-            {/* Background circle */}
-            <circle
-              className="stroke-current opacity-30"
-              cx="10"
-              cy="10"
-              r="8"
-              fill="none"
-              strokeWidth="2"
-            />
-            {/* Spinning circle */}
-            <circle
-              className="origin-center animate-spin stroke-current"
-              cx="10"
-              cy="10"
-              r="8"
-              fill="none"
-              strokeWidth="2"
-              strokeDasharray="12.5 50"
-              strokeLinecap="round"
-            />
-          </svg>
-        )}
+            strokeWidth="2"
+          />
+          {/* Spinning circle */}
+          <circle
+            className="origin-center animate-spin stroke-current"
+            cx="10"
+            cy="10"
+            r="8"
+            fill="none"
+            strokeWidth="2"
+            strokeDasharray="12.5 50"
+            strokeLinecap="round"
+          />
+        </svg>
+      )}
 
-        {children && (
-          <span
-            data-text
-            className={cx("transition-inherit-all", !noTextPadding && "px-0.5")}
-          >
-            {children}
-          </span>
-        )}
-      </div>
+      {children && (
+        <span
+          data-text
+          className={cx("transition-inherit-all", !noTextPadding && "px-0.5")}
+        >
+          {children}
+        </span>
+      )}
       {/* Trailing icon */}
       {isValidElement(IconTrailing) && IconTrailing}
       {isReactComponent(IconTrailing) && (
