@@ -1,5 +1,4 @@
 import { Plus, RefreshCcw05 } from "@untitledui/icons";
-import { syncIndexInfo } from "@/api/indexInfoApi";
 import { Button } from "@/components/common/buttons/Button";
 import { useIndexIndexListStore } from "@/store/indexInfoListStore";
 import { useModalStore } from "@/store/modalStore";
@@ -18,12 +17,8 @@ export const IndexHeader = () => {
   };
 
   // 지수 연동 버튼 클릭 핸들러
-  const handleSyncClick = async () => {
-    const result = await syncIndexInfo();
-    openIndexSync({
-      successCount: result.successCount,
-      failCount: result.failCount,
-    });
+  const handleSyncClick = () => {
+    openIndexSync();
   };
   return (
     <div className="border-secondary flex justify-between border-b px-6 py-5">

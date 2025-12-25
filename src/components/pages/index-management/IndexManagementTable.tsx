@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { Edit01, RefreshCcw05, Star01, Trash01 } from "@untitledui/icons";
-import { deleteIndexInfo, syncIndexInfo } from "@/api/indexInfoApi";
+import { deleteIndexInfo } from "@/api/indexInfoApi";
 import { Badge } from "@/components/common/badges/Badge";
 import { Button } from "@/components/common/buttons/Button";
 import { Empty } from "@/components/common/Empty";
@@ -66,12 +66,8 @@ const IndexTable = () => {
   };
 
   // 지수 연동 버튼 클릭 핸들러
-  const handleSyncClick = async () => {
-    const result = await syncIndexInfo();
-    openIndexSync({
-      successCount: result.successCount,
-      failCount: result.failCount,
-    });
+  const handleSyncClick = () => {
+    openIndexSync();
   };
 
   // 지수 수정 버튼 클릭

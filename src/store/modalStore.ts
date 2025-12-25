@@ -9,7 +9,7 @@ type ModalState =
   | { type: "indexDataForm"; props: IndexDataModalProps }
   | { type: "indexDataSync"; props: IndexDataSyncModalProps }
   | { type: "indexForm"; props: IndexModalProps }
-  | { type: "indexSync"; props: IndexSyncModalProps };
+  | { type: "indexSync" };
 
 // Confirm
 interface ConfirmProps {
@@ -36,12 +36,6 @@ interface IndexModalProps {
   initial?: IndexInfoResponse;
 }
 
-// IndexSync 지수연동
-interface IndexSyncModalProps {
-  successCount?: number;
-  failCount?: number;
-}
-
 interface ModalStore {
   modal: ModalState | null;
 
@@ -51,7 +45,7 @@ interface ModalStore {
   openIndexDataForm: (props: IndexDataModalProps) => void;
   openIndexDataSync: (props: IndexDataSyncModalProps) => void;
   openIndexForm: (props: IndexModalProps) => void;
-  openIndexSync: (props: IndexSyncModalProps) => void;
+  openIndexSync: () => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
@@ -65,5 +59,5 @@ export const useModalStore = create<ModalStore>((set) => ({
   openIndexDataSync: (props) =>
     set({ modal: { type: "indexDataSync", props } }),
   openIndexForm: (props) => set({ modal: { type: "indexForm", props } }),
-  openIndexSync: (props) => set({ modal: { type: "indexSync", props } }),
+  openIndexSync: () => set({ modal: { type: "indexSync" } }),
 }));
