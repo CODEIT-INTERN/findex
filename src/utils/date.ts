@@ -1,7 +1,6 @@
 import type { DateValue } from "react-aria-components";
 import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
 
-// TODO: 백엔드 요청 데이터 형식이랑 같은 지 확인해봐야 함
 // DateValue → YYYY-MM-DD 문자열 변환
 export const formatDateValue = (dateValue: DateValue | null) => {
   if (!dateValue) return "";

@@ -92,7 +92,6 @@ export const IndexSyncListSection = () => {
       await patchAutoSyncConfigs(item.id, body);
       await fetchIndexItems();
     } catch (error) {
-      console.log(error);
       updateItemEnabled(item.id, previousValue);
     }
   };
