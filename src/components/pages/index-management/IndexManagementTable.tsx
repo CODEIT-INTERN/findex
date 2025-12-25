@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { Edit01, RefreshCcw05, Star01, Trash01 } from "@untitledui/icons";
 import { deleteIndexInfo, syncIndexInfo } from "@/api/indexInfoApi";
+import { Badge } from "@/components/common/badges/Badge";
 import { Button } from "@/components/common/buttons/Button";
 import { Empty } from "@/components/common/Empty";
 import { Table } from "@/components/common/table/Table";
@@ -163,7 +164,9 @@ const IndexTable = () => {
                   <Table.Cell>{item.employedItemsCount}</Table.Cell>
                   <Table.Cell>{item.basePointInTime}</Table.Cell>
                   <Table.Cell>{item.baseIndex}</Table.Cell>
-                  <Table.Cell>{item.sourceType}</Table.Cell>
+                  <Table.Cell>
+                    <Badge kind="source" value={item.sourceType} />
+                  </Table.Cell>
                   <Table.Cell>
                     {item.favorite ? (
                       <Star01 size={20} stroke="#FDB022" fill="#FDB022" />

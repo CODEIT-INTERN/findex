@@ -11,6 +11,7 @@ interface ConfirmModalProps {
   children: React.ReactNode;
   variant?: "danger" | "primary";
   confirmText?: string;
+  isLoading?: boolean;
   isDisabled?: boolean;
   isSingleButton?: boolean;
 }
@@ -23,6 +24,7 @@ const ConfirmModal = ({
   children,
   variant = "danger",
   confirmText,
+  isLoading = false,
   isDisabled = false,
   isSingleButton = false,
 }: ConfirmModalProps) => {
@@ -63,7 +65,12 @@ const ConfirmModal = ({
       </div>
       <div className="flex justify-between gap-3">
         {!isSingleButton && (
-          <Button color="secondary" className="w-full" onClick={onClose}>
+          <Button
+            color="secondary"
+            className="w-full"
+            onClick={onClose}
+            isDisabled={isLoading}
+          >
             취소
           </Button>
         )}
@@ -72,7 +79,9 @@ const ConfirmModal = ({
           color={config.buttonColor}
           className="w-full"
           onClick={onConfirm}
-          isDisabled={isDisabled}
+          isDisabled={isDisabled || isLoading}
+          isLoading={isLoading}
+          showTextWhileLoading
         >
           {confirmText || config.defaultText}
         </Button>

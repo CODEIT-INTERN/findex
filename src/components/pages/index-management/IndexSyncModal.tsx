@@ -13,12 +13,15 @@ const IndexSyncModal = () => {
 
   // 연동 컴펌 모달 -> 연동 결과 모달
   const [step, setStep] = useState<"confirm" | "result">("confirm");
+  // 연동중(로딩) 상태
+  const [isSyncing, setIsSyncing] = useState(false);
   const [syncResult, setSyncResult] = useState({
     successCount: 0,
     failCount: 0,
   });
 
   const handleSync = async () => {
+    setIsSyncing(true);
     try {
       const { successCount, failCount } = await syncIndexInfo();
       setSyncResult({ successCount, failCount });
@@ -28,6 +31,8 @@ const IndexSyncModal = () => {
     } catch (err) {
       errorToast("지수 연동에 실패하였습니다.");
       close();
+    } finally {
+      setIsSyncing(false);
     }
   };
   return (
@@ -39,6 +44,8 @@ const IndexSyncModal = () => {
           onConfirm={handleSync}
           title="지수 정보 연동"
           variant="primary"
+          isLoading={isSyncing}
+          confirmText={isSyncing ? "연동 중" : "연동"}
         >
           <p className="text-sm text-gray-500">
             Open API를 통해 최신 정보를 연동합니다.
