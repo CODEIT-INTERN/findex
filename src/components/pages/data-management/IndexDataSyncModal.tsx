@@ -70,7 +70,6 @@ export default function IndexDataSyncModal({
 
       successToast("연동이 완료되었습니다.");
     } catch (error) {
-      console.log(error);
       errorToast("연동 중 오류가 발생하였습니다.");
     }
   };

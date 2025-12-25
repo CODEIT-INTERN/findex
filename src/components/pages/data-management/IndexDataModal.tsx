@@ -153,7 +153,6 @@ export default function IndexDataModal({
       await fetchIndexDataList();
       onClose();
     } catch (error) {
-      console.log(error);
       errorToast(`${mode === "create" ? "등록" : "수정"}에 실패하였습니다`);
     } finally {
       setIsPending(false);

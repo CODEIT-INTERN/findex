@@ -144,7 +144,6 @@ export const useIndexDataListStore = create<IndexDataListState>((set, get) => ({
       window.URL.revokeObjectURL(url);
       set({ isLoadingExport: false });
     } catch (error) {
-      console.log("CSV 다운로드 실패", error);
       set({ isLoadingExport: false });
       throw error;
     }

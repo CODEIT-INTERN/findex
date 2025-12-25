@@ -55,7 +55,6 @@ export default function DataManagementTable({
       successToast("성공적으로 삭제되었습니다.");
       await fetch();
     } catch (error) {
-      console.log(error);
       errorToast("삭제에 실패하였습니다.");
     } finally {
       close();
