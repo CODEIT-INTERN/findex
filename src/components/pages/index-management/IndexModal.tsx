@@ -34,8 +34,8 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
       indexClassification: initial?.indexClassification || "",
       indexName: initial?.indexName || "",
       basePointInTime: parseDateValue(initial?.basePointInTime) || null,
-      employedItemsCount: initial?.employedItemsCount ?? "0",
-      baseIndex: initial?.baseIndex ?? "0",
+      employedItemsCount: initial?.employedItemsCount ?? null,
+      baseIndex: initial?.baseIndex ?? null,
       favorite: initial?.favorite ?? true,
     };
   });
@@ -93,7 +93,9 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
     !!formData.indexClassification &&
     !!formData.indexName &&
     !!formData.basePointInTime &&
+    formData.employedItemsCount !== null &&
     formData.employedItemsCount !== 0 &&
+    formData.baseIndex !== null &&
     formData.baseIndex !== 0;
 
   // 타이틀 분기 처리
@@ -177,7 +179,11 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
                 pattern="[0-9]*"
                 label="채용 종목 수"
                 placeholder="0"
-                value={String(formData.employedItemsCount)}
+                value={
+                  formData.employedItemsCount === null
+                    ? undefined
+                    : String(formData.employedItemsCount)
+                }
                 onChange={(val) => handleChange("employedItemsCount", val)}
                 isRequired
                 isInvalid={!isView && formData.employedItemsCount === 0}
@@ -187,7 +193,11 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
                 pattern="[0-9]*"
                 label="기준 지수"
                 placeholder="0"
-                value={String(formData.baseIndex)}
+                value={
+                  formData.baseIndex === null
+                    ? undefined
+                    : String(formData.baseIndex)
+                }
                 onChange={(val) => handleChange("baseIndex", val)}
                 isRequired
                 isInvalid={!isView && formData.baseIndex === 0}
