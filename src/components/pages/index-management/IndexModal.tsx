@@ -101,6 +101,14 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
     if (isView || isEdit) return "지수 정보 수정";
     return "지수 정보 등록";
   };
+
+  // 기준시점 선택 취소 핸들러
+  const handleCancel = () => {
+    setFormData((prev) => ({
+      ...prev,
+      basePointInTime: parseDateValue(initial?.basePointInTime) || null,
+    }));
+  };
   return (
     <>
       <BaseModal
@@ -158,7 +166,9 @@ const IndexModal = ({ isOpen, onClose, mode, initial }: IndexModalProps) => {
               <DatePicker
                 value={formData.basePointInTime}
                 placeholder="날짜를 선택해주세요"
-                onChange={(val) => handleChange("basePointInTime", val)}
+                defaultValue={formData.basePointInTime ?? undefined}
+                onChange={(value) => handleChange("basePointInTime", value)}
+                onCancel={handleCancel}
               />
             </div>
             <div className="flex justify-between gap-3">
