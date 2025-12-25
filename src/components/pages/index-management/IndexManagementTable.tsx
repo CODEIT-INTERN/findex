@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { Edit01, RefreshCcw05, Star01, Trash01 } from "@untitledui/icons";
-import { deleteIndexInfo, syncIndexInfo } from "@/api/indexInfoApi";
+import { deleteIndexInfo } from "@/api/indexInfoApi";
 import { Badge } from "@/components/common/badges/Badge";
 import { Button } from "@/components/common/buttons/Button";
 import { Empty } from "@/components/common/Empty";
@@ -66,12 +66,8 @@ const IndexTable = () => {
   };
 
   // 지수 연동 버튼 클릭 핸들러
-  const handleSyncClick = async () => {
-    const result = await syncIndexInfo();
-    openIndexSync({
-      successCount: result.successCount,
-      failCount: result.failCount,
-    });
+  const handleSyncClick = () => {
+    openIndexSync();
   };
 
   // 지수 수정 버튼 클릭
@@ -113,12 +109,14 @@ const IndexTable = () => {
                   "indexClassification",
                   sortDescriptor,
                 )}
+                className="w-2/12"
               />
               <Table.Head
                 id="indexName"
                 label="지수"
                 allowsSorting
                 isActive={isActiveSortColumn("indexName", sortDescriptor)}
+                className="w-3/12"
               />
               <Table.Head
                 id="employedItemsCount"
@@ -128,53 +126,64 @@ const IndexTable = () => {
                   "employedItemsCount",
                   sortDescriptor,
                 )}
+                className="w-1/12"
               />
               <Table.Head
                 id="basePointInTime"
                 label="기준 시점"
                 allowsSorting
                 isActive={isActiveSortColumn("basePointInTime", sortDescriptor)}
+                className="w-2/12"
               />
               <Table.Head
                 id="baseIndex"
                 label="기준 지수"
                 allowsSorting
                 isActive={isActiveSortColumn("baseIndex", sortDescriptor)}
+                className="w-1/12"
               />
               <Table.Head
                 id="sourceType"
                 label="소스 타입"
                 allowsSorting
                 isActive={isActiveSortColumn("sourceType", sortDescriptor)}
+                className="w-1/12"
               />
               <Table.Head
                 id="favorite"
                 label="즐겨찾기"
                 allowsSorting
                 isActive={isActiveSortColumn("favorite", sortDescriptor)}
+                className="w-1/12"
               />
-              <Table.Head id="actions" />
+              <Table.Head id="actions" className="w-1/12" />
             </Table.Header>
 
             <Table.Body items={sortedItems}>
               {(item) => (
                 <Table.Row id={item.id} key={item.id}>
-                  <Table.Cell>{item.indexClassification}</Table.Cell>
-                  <Table.Cell>{item.indexName}</Table.Cell>
-                  <Table.Cell>{item.employedItemsCount}</Table.Cell>
-                  <Table.Cell>{item.basePointInTime}</Table.Cell>
-                  <Table.Cell>{item.baseIndex}</Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="w-2/12">
+                    {item.indexClassification}
+                  </Table.Cell>
+                  <Table.Cell className="w-3/12">{item.indexName}</Table.Cell>
+                  <Table.Cell className="w-1/12">
+                    {item.employedItemsCount}
+                  </Table.Cell>
+                  <Table.Cell className="w-2/12">
+                    {item.basePointInTime}
+                  </Table.Cell>
+                  <Table.Cell className="w-1/12">{item.baseIndex}</Table.Cell>
+                  <Table.Cell className="w-1/12">
                     <Badge kind="source" value={item.sourceType} />
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="w-1/12">
                     {item.favorite ? (
                       <Star01 size={20} stroke="#FDB022" fill="#FDB022" />
                     ) : (
                       <Star01 size={20} stroke="#E9EAEB" fill="#E9EAEB" />
                     )}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="w-1/12">
                     <div className="flex justify-end gap-0.5">
                       <Button
                         color="tertiary"
