@@ -188,6 +188,7 @@ export const Button = ({
         styles.common.root,
         styles.sizes[size].root,
         styles.colors[color].root,
+        IconTrailing ? "justify-between" : "justify-center",
         loading && "pointer-events-none",
         // If in `loading` state, hide everything except the loading icon (and text if `showTextWhileLoading` is true).
         loading &&
@@ -197,58 +198,85 @@ export const Button = ({
         className,
       )}
     >
-      {/* Leading icon */}
-      {isValidElement(IconLeading) && IconLeading}
-      {isReactComponent(IconLeading) && (
-        <IconLeading data-icon="leading" className={styles.common.icon} />
-      )}
+      {IconTrailing ? (
+        <div className="gap-inherit flex w-full items-center justify-between">
+          <div className="flex items-center justify-start gap-2">
+            {/* Leading icon */}
+            {isValidElement(IconLeading) && IconLeading}
+            {isReactComponent(IconLeading) && (
+              <IconLeading data-icon="leading" className={styles.common.icon} />
+            )}
 
-      {loading && (
-        <svg
-          fill="none"
-          data-icon="loading"
-          viewBox="0 0 20 20"
-          className={cx(
-            styles.common.icon,
-            !showTextWhileLoading &&
-              "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+            {loading && (
+              <svg
+                fill="none"
+                data-icon="loading"
+                viewBox="0 0 20 20"
+                className={cx(
+                  styles.common.icon,
+                  !showTextWhileLoading &&
+                    "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+                )}
+              >
+                {/* Background circle */}
+                <circle
+                  className="stroke-current opacity-30"
+                  cx="10"
+                  cy="10"
+                  r="8"
+                  fill="none"
+                  strokeWidth="2"
+                />
+                {/* Spinning circle */}
+                <circle
+                  className="origin-center animate-spin stroke-current"
+                  cx="10"
+                  cy="10"
+                  r="8"
+                  fill="none"
+                  strokeWidth="2"
+                  strokeDasharray="12.5 50"
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
+
+            {children && (
+              <span
+                data-text
+                className={cx(
+                  "transition-inherit-all",
+                  !noTextPadding && "px-0.5",
+                )}
+              >
+                {children}
+              </span>
+            )}
+          </div>
+          {/* Trailing icon */}
+          {isValidElement(IconTrailing) && IconTrailing}
+          {isReactComponent(IconTrailing) && (
+            <IconTrailing data-icon="trailing" className={styles.common.icon} />
           )}
-        >
-          {/* Background circle */}
-          <circle
-            className="stroke-current opacity-30"
-            cx="10"
-            cy="10"
-            r="8"
-            fill="none"
-            strokeWidth="2"
-          />
-          {/* Spinning circle */}
-          <circle
-            className="origin-center animate-spin stroke-current"
-            cx="10"
-            cy="10"
-            r="8"
-            fill="none"
-            strokeWidth="2"
-            strokeDasharray="12.5 50"
-            strokeLinecap="round"
-          />
-        </svg>
-      )}
-
-      {children && (
-        <span
-          data-text
-          className={cx("transition-inherit-all", !noTextPadding && "px-0.5")}
-        >
-          {children}
-        </span>
-      )}
-      {/* Trailing icon */}
-      {isValidElement(IconTrailing) && IconTrailing}
-      {isReactComponent(IconTrailing) && (
-        <IconTrailing data-icon="trailing" className={styles.common.icon} />
+        </div>
+      ) : (
+        <>
+          {isValidElement(IconLeading) && IconLeading}
+          {isReactComponent(IconLeading) && (
+            <IconLeading data-icon="leading" className={styles.common.icon} />
+          )}
+          {children && (
+            <span
+              data-text
+              className={cx(
+                "transition-inherit-all",
+                !noTextPadding && "px-0.5",
+              )}
+            >
+              {children}
+            </span>
+          )}
+        </>
       )}
     </Component>
   );
