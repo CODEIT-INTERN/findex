@@ -62,7 +62,7 @@ const MajorIndex = () => {
           {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
         </Select>
       </div>
-      <div className="scrollbar-hide flex gap-4 overflow-x-auto p-6">
+      <div className="scrollbar-thin flex w-full gap-4 overflow-x-auto scroll-smooth p-6">
         {isLoading ? (
           <div className="text-text-tertiary flex h-44 w-full items-center justify-center">
             데이터를 불러오는 중입니다...
