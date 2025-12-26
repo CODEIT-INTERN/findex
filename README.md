@@ -14,20 +14,49 @@ React + TypeScript + Vite로 구축된 Findex 인덱스 관리 대시보드입�
 - **상태 관리**: Zustand
 - **UI & 그래프**: React Aria Components, Recharts, Untitled UI
 
+## 환경 설정 (Environment Variables)
+
+외부 API 통신을 위해 환경 변수 설정이 필요합니다.
+
+### 설정 방법
+
+1. 루트 디렉토리에 `.env` 파일을 생성합니다.
+2. 아래 내용을 참고하여 환경 변수를 설정합니다.
+
+| 변수명 | 필수 여부 | 설명 |
+| :--- | :---: | :--- |
+| `API_PROXY_TARGET` | **필수** | API 요청을 전달할 타겟 서버 주소 |
+
+**설정 예시:**
+```env
+API_PROXY_TARGET=http://sprint-project-example.com/sb/findex
+```
+
 ## 프로젝트 구조
 
 ```
 src/
-├─ api/              # axios 기반 API 클라이언트 및 도메인별 API 래퍼
-├─ components/       # 공용 UI 컴포넌트와 페이지 구성 요소
-    ├─ common/
-    └─ pages/
-├─ constants/        # 네비게이션 등 상수 정의
-├─ hooks/            # 커스텀 훅 (무한 스크롤 등)
-├─ pages/            # 라우트 엔트리: 대시보드, 지수/데이터/연동 관리
-├─ store/            # Zustand 스토어
-├─ styles/           # Tailwind 4 기반 전역 스타일
-└─ utils/            # 테이블 정렬, 클래스 병합 등 유틸리티
+├─ api/                   # axios 기반 API 클라이언트 및 도메인별 래퍼
+├─ assets/                # 아이콘 등 정적 에셋
+├─ components/
+│  ├─ layout/             # 최상위 레이아웃과 사이드 내비게이션
+│  ├─ common/             # 전역 공용 컴포넌트
+│  └─ pages/              # 각 페이지에 사용된 컴포넌트
+│     ├─ dashboard/       # 주요 지수 카드, 추세·성과 차트
+│     ├─ index-management/# 지수 목록 테이블, 등록/수정 모달, 필터
+│     ├─ data-management/ # 데이터 테이블, 필터, 데이터/동기화 모달
+│     └─ integrations/    # 연동 현황 카드, 동기화 이력/리스트
+├─ constants/             # 네비게이션 등 상수 정의
+├─ hooks/                 # 커스텀 훅
+├─ pages/                 # 라우트 엔트리 컴포넌트
+│  ├─ Dashboard.tsx
+│  ├─ IndexManagement.tsx
+│  ├─ DataManagement.tsx
+│  └─ Integrations.tsx
+├─ store/                 # Zustand 스토어
+├─ styles/                # Tailwind 4 기반 전역 스타일
+├─ utils/                 # 테이블 정렬, 클래스 병합 등 유틸리티
+└─ main.tsx               # 라우터 및 전역 프로바이더 진입점
 ```
 
 ## 빠른 시작
